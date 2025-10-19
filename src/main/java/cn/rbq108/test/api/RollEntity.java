@@ -1,12 +1,17 @@
 package cn.rbq108.test.api;
 
-public class RollEntity {
+public interface RollEntity {
+    //void doABarrelRoll$changeElytraLook(double pitch, double yaw, double roll, Sensitivity sensitivity, double mouseDelta);
 
-    void doABarrelRoll$changeElytraLook(float pitch, float yaw, float roll);
+    //void doABarrelRoll$changeElytraLook(float pitch, float yaw, float roll);
 
-//    float doABarrelRoll$getRoll();
+    boolean doABarrelRoll$isRolling();
+
+    void doABarrelRoll$setRolling(boolean rolling);
+
+    float doABarrelRoll$getRoll();
 
     float doABarrelRoll$getRoll(float tickDelta);
 
-//    void doABarrelRoll$setRoll(float roll);
+    void doABarrelRoll$setRoll(float roll);
 }

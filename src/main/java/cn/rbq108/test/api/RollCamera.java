@@ -1,5 +1,5 @@
 package cn.rbq108.test.api;
 
-public class RollCamera {
+public interface RollCamera {
     float doABarrelRoll$getRoll();
 }

@@ -74,7 +74,6 @@ neoForge {
             logLevel = org.slf4j.event.Level.DEBUG
         }
     }
-
     mods {
         // define mod <-> source bindings
         // these are used to tell the game which sources are for which mod

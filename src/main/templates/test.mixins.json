@@ -1,11 +1,13 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "cn.rbq108.test.mixin",
+  "package": "cn.rbq108.test.Mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
   ],
   "client": [
+    "CameraContral",
+    "EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
