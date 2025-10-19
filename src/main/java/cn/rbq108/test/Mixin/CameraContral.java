@@ -30,7 +30,11 @@ public abstract class CameraContral implements RollCamera {
             at = @At("HEAD")
     )
     private void doABarrelRoll$interpolateRollnt(CallbackInfo ci) {
-        if (!((RollEntity) entity).doABarrelRoll$isRolling()) {
+        if (this.entity == null) {
+            return;
+        }
+
+        if (!((RollEntity) this.entity).doABarrelRoll$isRolling()) {
             lastRollBack = rollBack;
             rollBack -= rollBack * 0.5f;
         }

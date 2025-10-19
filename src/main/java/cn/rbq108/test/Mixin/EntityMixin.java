@@ -22,7 +22,7 @@ public abstract class EntityMixin implements RollEntity {
     public boolean doABarrelRoll$isRolling() {
         // 在这里写你的逻辑，比如检查某个按键是否被按下
         // 我这里先用一个简单的 false 作为占位符
-        // isRolling_testMod = /* 你的按键检查逻辑 */;
+         isRolling_testMod =true; /* 你的按键检查逻辑 */
         return this.isRolling_testMod;
     }
 
@@ -31,9 +31,9 @@ public abstract class EntityMixin implements RollEntity {
         // 在这里写你的翻滚角度计算逻辑
         // 比如，如果正在翻滚，就让 roll_testMod 增加
         // 我这里先用一个简单的 0.0f 作为占位符
-        // if (this.isRolling_testMod) {
-        //     roll_testMod += 10.0f * tickDelta;
-        // }
+        if (this.isRolling_testMod) {
+             roll_testMod += 10.0f * tickDelta;
+        }
         return this.roll_testMod;
     }
 }
