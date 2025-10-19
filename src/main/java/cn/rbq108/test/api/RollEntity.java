@@ -14,4 +14,8 @@ public interface RollEntity {
     float doABarrelRoll$getRoll(float tickDelta);
 
     void doABarrelRoll$setRoll(float roll);
+
+    float doABarrelRoll$getYaw(float tickDelta);
+
+    float doABarrelRoll$getPitch(float tickDelta);
 }

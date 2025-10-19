@@ -5,35 +5,61 @@ import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-// 1. Mixin 目标是 Entity 类
-// 2. 让这个 Mixin 实现你的 RollEntity 接口
 @Mixin(Entity.class)
 public abstract class EntityMixin implements RollEntity {
 
-    // 使用 @Unique 来添加新字段，用于存储翻滚状态
     @Unique
-    private boolean isRolling_testMod; // 加个后缀避免冲突
-
+    private boolean isRolling_testMod;
     @Unique
     private float roll_testMod;
 
-    // 3. 实现接口里的方法
+    // 为 yaw 和 pitch 添加新的字段
+    @Unique
+    private float customYaw_testMod;
+    @Unique
+    private float customPitch_testMod;
+
+
     @Override
     public boolean doABarrelRoll$isRolling() {
-        // 在这里写你的逻辑，比如检查某个按键是否被按下
-        // 我这里先用一个简单的 false 作为占位符
-         isRolling_testMod =true; /* 你的按键检查逻辑 */
+        // 在这里你可以写真正的按键检测逻辑
+        // 为了演示，我们暂时假设它一直为 true
+        isRolling_testMod = true;
         return this.isRolling_testMod;
     }
 
     @Override
     public float doABarrelRoll$getRoll(float tickDelta) {
-        // 在这里写你的翻滚角度计算逻辑
-        // 比如，如果正在翻滚，就让 roll_testMod 增加
-        // 我这里先用一个简单的 0.0f 作为占位符
         if (this.isRolling_testMod) {
-             roll_testMod += 10.0f * tickDelta;
+            // 每次调用时增加 roll 值，制造旋转效果
+            roll_testMod += 10.0f * tickDelta;
         }
         return this.roll_testMod;
+    }
+
+    // --- 新增方法 ---
+
+    @Override
+    public float doABarrelRoll$getYaw(float tickDelta) {
+        // 示例：让镜头轻微水平摆动
+        if (this.isRolling_testMod) {
+            // 使用 sin 函数创建一个来回摆动的效果
+            customYaw_testMod = (float) Math.sin(System.currentTimeMillis() / 500.0) * 15.0f;
+        } else {
+            customYaw_testMod = 0;
+        }
+        return customYaw_testMod;
+    }
+
+    @Override
+    public float doABarrelRoll$getPitch(float tickDelta) {
+        // 示例：让镜头轻微垂直摆动
+        if (this.isRolling_testMod) {
+            // 使用 cos 函数，与 yaw 错开
+            customPitch_testMod = (float) Math.cos(System.currentTimeMillis() / 500.0) * 10.0f;
+        } else {
+            customPitch_testMod = 0;
+        }
+        return customPitch_testMod;
     }
 }
