@@ -32,7 +32,7 @@ public abstract class EntityMixin implements RollEntity {
     public float doABarrelRoll$getRoll(float tickDelta) {
         if (this.isRolling_testMod) {
             // 每次调用时增加 roll 值，制造旋转效果
-            roll_testMod += 10.0f * tickDelta;
+            roll_testMod += -1.0f * tickDelta;
         }
         return this.roll_testMod;
     }
