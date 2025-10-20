@@ -44,7 +44,7 @@ public abstract class EntityMixin implements RollEntity {
         // 示例：让镜头轻微水平摆动
         if (this.isRolling_testMod) {
             // 使用 sin 函数创建一个来回摆动的效果
-            customYaw_testMod = (float) Math.sin(System.currentTimeMillis() / 500.0) * 15.0f;
+            customYaw_testMod = 0;//(float) Math.sin(System.currentTimeMillis() / 500.0) * 15.0f;
         } else {
             customYaw_testMod = 0;
         }
@@ -56,7 +56,7 @@ public abstract class EntityMixin implements RollEntity {
         // 示例：让镜头轻微垂直摆动
         if (this.isRolling_testMod) {
             // 使用 cos 函数，与 yaw 错开
-            customPitch_testMod = (float) Math.cos(System.currentTimeMillis() / 500.0) * 10.0f;
+            customPitch_testMod = 0;//(float) Math.cos(System.currentTimeMillis() / 500.0) * 10.0f;
         } else {
             customPitch_testMod = 0;
         }
