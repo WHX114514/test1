@@ -57,10 +57,10 @@ public class ClientEvents {
             CameraManager.prevYaw = CameraManager.currentYaw;
 
             // b. 计算新的目标角度
-            float targetPitch = 0.0f;
+            float targetPitch = 0.0f;//     ←——俯仰轴的角度！
             double time = (player.tickCount) / 20.0;
             // 重要：这里的计算应该基于一个稳定的值，而不是上一帧渲染的yaw
-            float targetYaw = (float) (180 + Math.sin(time) * 45.0); // 示例：围绕180度来回摆动45度
+            float targetYaw = 0.0f;//////(float) (180 + Math.sin(time) * 45.0); // 示例：围绕180度来回摆动45度
 
             // c. 更新状态管理器中的 "当前" 值
             CameraManager.currentPitch = targetPitch;
