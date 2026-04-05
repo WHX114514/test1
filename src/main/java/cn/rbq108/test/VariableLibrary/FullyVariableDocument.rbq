@@ -1,0 +1,86 @@
+FullyVariableDocument.rbq
+全变量文档
+
+注：
+1,所有变量前面都加一个“B_”前缀以防与保留名或者其他模组变量冲突
+2,本文档写于2026.4.4 00：50，可能漏掉后续加入的新变量
+3,除非标记bool或者int之类的，不然以下所有变量均为双精度浮点数（double）
+
+三轴速度（地面参考系）
+B_Vx1
+B_Vy1
+B_Vz1
+
+三轴速度（玩家参考系）
+B_Vx2
+B_Vy2
+B_Vz2
+
+三轴目标速度（玩家参考系）
+B_Vx3
+B_Vy3
+B_Vz3
+
+三轴真目标速度（玩家参考系）
+B_Vx3_1
+B_Vy3_1
+B_Vz3_1
+
+三轴目标速度（地面参考系）
+B_Vx4
+B_Vy4
+B_Vz4
+
+三轴角度
+B_Dx
+B_Dy
+B_Dz
+
+三轴键输入（int）
+B_INx
+B_INy
+B_INz
+
+位移相关
+是否冲刺(bool)  B_rush
+非冲刺最大移速   B_Vmax
+冲刺倍率（x/y，若后退则直接退出冲刺状态）  B_rush_xy
+冲刺倍率（z）    B_rush_z
+加力燃烧室倍率 B_AfterburnerRatio
+减速倍率   B_BrakeRatio
+最大加速度 B_Amax
+
+操纵相关
+是否启用主动停滞（bool）        B_hold
+主动停滞力度倍率（0-100，int）  B_HoldMultiplier
+是否启用无重力操作（bool）      B_LowGravity
+重力加速度                    B_g
+
+吸附相关（p是Paste缩写，当初在纸上写代码的时候实在想不出用啥词就选了这个勾史）
+吸附力度倍率 B_PasteMultiplier
+是否处于吸附状态（bool） B_Pstate
+玩家系吸附方向（应该是角度）
+B_Px1
+B_Py1
+B_pz1
+地面系吸附方向（为什么地面系也要角度，当初我写了个啥）
+B_Px
+B_Py
+B_Pz
+地面系吸附加速度
+B_Pax
+B_Pay
+B_Paz
+//此处变量截止至4.4 9：12
+
+旋转倍率  rollSpeed
+
+重力相关
+玩家系重力加速度
+B_gx
+B_gy
+B_gz
+
+//此处变量截止至4.4 21：45
+
+视角相关

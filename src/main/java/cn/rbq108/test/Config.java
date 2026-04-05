@@ -14,9 +14,13 @@ import java.util.stream.Collectors;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
 // Demonstrates how to use Neo's config APIs
-@EventBusSubscriber(modid = main.MODID, bus = EventBusSubscriber.Bus.MOD)
+//@EventBusSubscriber(modid = main.MODID)
 public class Config
 {
+    // 私有化构造函数，防止被实例化
+    private Config() {
+        throw new UnsupportedOperationException("This class is disabled.");
+    }//显然这个私有化并没有解决报错的问题（
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     private static final ModConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
@@ -48,7 +52,7 @@ public class Config
         return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
     }
 
-    @SubscribeEvent
+    //@SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
         logDirtBlock = LOG_DIRT_BLOCK.get();

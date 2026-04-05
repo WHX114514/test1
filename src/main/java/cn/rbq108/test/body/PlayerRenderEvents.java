@@ -1,3 +1,10 @@
+
+
+
+/*
+
+这坨屎山不要啦！
+
 package cn.rbq108.test.body; // 确保包名正确
 
 // --- 必需的 Import 语句 ---
@@ -15,8 +22,8 @@ import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 /**
  * 这个类专门负责处理玩家模型的渲染事件。
  * 它的职责是根据 CameraManager 中的状态来旋转玩家的身体。
- */
-@EventBusSubscriber(modid = main.MODID, bus = EventBusSubscriber.Bus.MOD)
+ /
+@EventBusSubscriber(modid = main.MODID, value = Dist.CLIENT)
 public class PlayerRenderEvents {
 
     @SubscribeEvent
@@ -63,3 +70,4 @@ public class PlayerRenderEvents {
         }
     }
 }
+*/

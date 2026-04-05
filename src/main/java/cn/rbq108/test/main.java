@@ -31,6 +31,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import cn.rbq108.test.VariableLibrary.Config;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(main.MODID)
@@ -88,7 +91,14 @@ public class main
         modEventBus.addListener(this::addCreative);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        //这是默认的配置文件，用不着了
+        //modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        // 神医挂号：注册我们的配置文件！
+        // 这样游戏启动时，就会在 config 文件夹里自动生成一个 next-boundary.toml 喵！
+        // 这是旧代码ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "next-boundary.toml");
+        // 神医缝合术：用最新的 modContainer 注册，并指定你的专属文件名喵！
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC, "next-boundary.toml");
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -96,12 +106,13 @@ public class main
         // Some common setup code
         LOGGER.info("HELLO FROM COMMON SETUP");
 
+        /*下面这一坨好像是没用的代码
         if (Config.logDirtBlock)
             LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
 
         LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
 
-        Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
+        Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));*/
     }
 
     // Add the example block item to the building blocks tab
@@ -120,7 +131,8 @@ public class main
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    //@EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = main.MODID, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent

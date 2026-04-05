@@ -1,0 +1,65 @@
+package cn.rbq108.test.VariableLibrary;
+
+import org.joml.Quaternionf;
+
+public class GlobalVariables {
+    // --- 摘自笨蛋主人的 FullyVariableDocument.rbq ---
+    // 三轴角度
+    public static double B_Dx = 0.0; // Pitch 俯仰角
+    public static double B_Dy = 0.0; // Yaw 偏航角
+    public static double B_Dz = 0.0; // Roll 滚转角
+
+    // 渲染平滑插值用的历史状态
+    public static double prev_B_Dx = 0.0;
+    public static double prev_B_Dy = 0.0;
+    public static double prev_B_Dz = 0.0;
+
+    // 操纵相关 (核心状态位，千万别移走喵！)
+    public static boolean B_LowGravity = false; // 当前是否处于无重力操作状态
+
+    // 矩阵转换代码
+    public static Quaternionf currentQuat = new Quaternionf();
+    public static Quaternionf prevQuat = new Quaternionf();
+
+    // 当前的实时旋转速度（这个是由系统自动算的，不要手动改它喵！）
+    public static float currentRollVelocity = 0.0f;
+
+    // --- 飞行状态与输入 ---
+    public static boolean B_rush = false; // 玩家当前是否按住了冲刺键
+
+    // 玩家的三轴按键输入状态 (-1, 0, 1)
+    public static int B_INx = 0; // 左右 (A/D)
+    public static int B_INy = 0; // 上下 (Ctrl/Space)
+    public static int B_INz = 0; // 前后 (S/W)
+
+    // ==========================================
+    // 绒布球总设计师的物理计算黑盒缓存区
+    // ==========================================
+
+    // 最终算出的三轴目标速度（玩家本地参考系）
+    public static float B_Vx3 = 0.0f;
+    public static float B_Vy3 = 0.0f;
+    public static float B_Vz3 = 0.0f;
+
+    // --- 第一阶段：三轴真目标速度（玩家参考系，吃满所有倍率后的推力期望） ---
+    public static float B_Vx3_1 = 0.0f;
+    public static float B_Vy3_1 = 0.0f;
+    public static float B_Vz3_1 = 0.0f;
+
+    // --- 第二阶段：三轴目标速度（地面参考系，经过四元数空间扭曲后的推力方向） ---
+    public static float B_Vx4 = 0.0f;
+    public static float B_Vy4 = 0.0f;
+    public static float B_Vz4 = 0.0f;
+
+    // --- 第三阶段：三轴真实速度（地面参考系，玩家正在维持的真实物理惯性！） ---
+    public static float B_Vx1 = 0.0f;
+    public static float B_Vy1 = 0.0f;
+    public static float B_Vz1 = 0.0f;
+
+
+    // ==========================================
+    // 🩺 视觉中枢变量：用于实现丝滑 FOV 切换
+    // ==========================================
+    public static float prevFovModifier = 0.0f;    // 上一逻辑帧的旧值
+    public static float currentFovModifier = 0.0f; // 当前逻辑帧的新值
+}
