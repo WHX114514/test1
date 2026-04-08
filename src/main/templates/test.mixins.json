@@ -8,7 +8,9 @@
   "client": [
     "CameraContral",
     "EntityMixin",
-    "KeyboardHandlerMixin"
+    "KeyboardHandlerMixin",
+    "MixinModelPart",
+    "MixinRemotePlayerModel"
 
   ],
   "injectors": {

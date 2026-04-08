@@ -3,6 +3,8 @@ package cn.rbq108.test.body;
 import cn.rbq108.test.main;
 import cn.rbq108.test.VariableLibrary.GlobalVariables;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -13,7 +15,7 @@ import org.joml.Quaternionf;
 @EventBusSubscriber(modid = main.MODID, value = Dist.CLIENT)
 public class model {
 
-    // 🩺 用来保存原版神经数据的“生命维持系统”
+    // 🩺 动画冰冻锁：防止抽搐的核心
     private static float oldXRot, oldYBodyRot, oldYHeadRot;
     private static float oldXRotO, oldYBodyRotO, oldYHeadRotO;
 
@@ -21,59 +23,70 @@ public class model {
     public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
         if (event.getEntity() instanceof LocalPlayer player && GlobalVariables.B_LowGravity) {
 
-            // ==========================================
-            // 🩺 1. 全身冰冻：把史蒂夫变成一个“僵硬的手办”
-            // ==========================================
-            // 备份原版数据
+
+
+            float pt = event.getPartialTick();
+
+            // 🩺 1. 补帧插值：获取平滑角度
+            float renderX = Mth.lerp(pt, trunk.prevSmoothX, trunk.smoothX);
+            float renderY = Mth.lerp(pt, trunk.prevSmoothY, trunk.smoothY);
+            float renderZ = Mth.lerp(pt, trunk.prevSmoothZ, trunk.smoothZ);
+
+            // 🩺 2. 计算当前碰撞箱中心点 (这就是报错的那个变量喵！)
+            float currentHitboxHeight = player.getBbHeight();
+            float centerY = currentHitboxHeight * 0.5f;
+
+            // 🩺 3. 构造身体四元数 (YXZ 顺序)
+            Quaternionf bodyQuat = new Quaternionf()
+                    .rotateY((float) Math.toRadians(-renderY))
+                    .rotateX(-(float) Math.toRadians(-renderX))
+                    .rotateZ((float) Math.toRadians(renderZ));
+
+            // 🩺 4. 冰冻动画锁
             oldXRot = player.getXRot(); oldXRotO = player.xRotO;
             oldYBodyRot = player.yBodyRot; oldYBodyRotO = player.yBodyRotO;
             oldYHeadRot = player.yHeadRot; oldYHeadRotO = player.yHeadRotO;
-
-            // 强制洗脑：180度在 MC 里是消除模型初始旋转的“魔法角度”
-            // 这样能剥离所有原版引擎的乱转，让他变成一根纯净的“指针”喵！
             player.setXRot(0f); player.xRotO = 0f;
             player.yBodyRot = 0f; player.yBodyRotO = 0f;
             player.yHeadRot = 0f; player.yHeadRotO = 0f;
 
-            // ==========================================
-            // 🩺 2. 空间劫持：视觉中心与物理重心完美缝合！
-            // ==========================================
+            // 🩺 5. 激活 Mixin 锁头通信
+            GlobalVariables.isPlayerRendering = true;
+            if (event.getRenderer() instanceof PlayerRenderer renderer) {
+                GlobalVariables.playerHead = renderer.getModel().head;
+                GlobalVariables.playerHat = renderer.getModel().hat;
+            }
+
+            // 🩺 6. 计算头身隔离矩阵
+            Quaternionf camQuat = new Quaternionf(GlobalVariables.prevQuat).slerp(GlobalVariables.currentQuat, pt);
+            Quaternionf y180 = new Quaternionf().rotateY((float) Math.PI);
+            Quaternionf z180 = new Quaternionf().rotateZ((float) Math.PI);
+            GlobalVariables.headFixQuat = new Quaternionf(z180).invert()
+                    .mul(new Quaternionf(y180).invert())
+                    .mul(new Quaternionf(bodyQuat).invert())
+                    .mul(camQuat).mul(y180).mul(z180);
+
+            // 🩺 7. 应用渲染 (身箱合一逻辑)
             PoseStack poseStack = event.getPoseStack();
-            poseStack.pushPose(); // 开启私人力场！
+            poseStack.pushPose();
 
-            // 获取平滑的绝对相机姿态
-            float pt = event.getPartialTick();
-            Quaternionf camQuat = new Quaternionf(GlobalVariables.prevQuat)
-                    .slerp(GlobalVariables.currentQuat, pt);
-
-            // 💥 终极缝合魔法：
-            // 相机的焦点永远在眼睛高度 (EyeHeight，约 1.62)
-            float cameraCenter = player.getEyeHeight();
-            // 你想要的飞船物理重心 (BbHeight * 0.6f，约 1.08)
-            float pivotHeight = player.getBbHeight() * 0.6f;
-
-            // 1. 第一步：把整个世界的旋转中心，移动到【相机的焦点】上！
-            // 保证飞船在旋转时，绝对不会偏离屏幕正中心喵！
-            poseStack.translate(0, cameraCenter, 0);
-
-            // 2. 降维打击：在相机焦点处应用你最完美的 6DOF 旋转！
-            poseStack.mulPose(camQuat);
-
-            // 3. 第三步：往回退的时候，只退回【飞船物理重心】的距离！
-            // 这相当于在视觉上把史蒂夫“拔高”了 0.5 格，让他的胸口（0.6f）刚好死死贴在相机的镜头中心喵！
-            poseStack.translate(0, -pivotHeight, 0);
+            // 将模型中心对齐碰撞箱中心，并执行旋转
+            poseStack.translate(0, centerY, 0);
+            poseStack.mulPose(bodyQuat);
+            // 补偿：让原版 1.8 高的模型中心（0.9）对齐支点
+            poseStack.translate(0, -0.9f, 0);
         }
     }
 
     @SubscribeEvent
     public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
         if (event.getEntity() instanceof LocalPlayer player && GlobalVariables.B_LowGravity) {
-            // ==========================================
-            // 🩺 3. 术后复苏：把一切还给原版引擎
-            // ==========================================
-            event.getPoseStack().popPose(); // 关闭私人力场
 
-            // 解冻神经，防止他的碰撞箱和移动逻辑坏掉喵！
+            // 🩺 8. 弹出矩阵
+            event.getPoseStack().popPose();
+            GlobalVariables.isPlayerRendering = false;
+
+            // 🩺 9. 解冻数值
             player.setXRot(oldXRot); player.xRotO = oldXRotO;
             player.yBodyRot = oldYBodyRot; player.yBodyRotO = oldYBodyRotO;
             player.yHeadRot = oldYHeadRot; player.yHeadRotO = oldYHeadRotO;

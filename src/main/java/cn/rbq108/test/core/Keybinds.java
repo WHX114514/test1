@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
 import org.lwjgl.glfw.GLFW;
 
-@EventBusSubscriber(modid = main.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = main.MODID, value = Dist.CLIENT)
 public class Keybinds {
 
     // 🩺 统一的分类名，确保所有按键都排在一起喵！

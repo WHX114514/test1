@@ -34,6 +34,13 @@ import org.slf4j.Logger;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.config.ModConfig;
 import cn.rbq108.test.VariableLibrary.Config;
+// NeoForge 1.21.1 网络核心组件
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
+// 自己手搓的通讯组件 (请确保包名和您之前写的一致喵！)
+import cn.rbq108.test.ServeMiao.communication.SyncRotationPayload;
+import cn.rbq108.test.ServeMiao.communication.NetworkHandler;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(main.MODID)
@@ -99,6 +106,8 @@ public class main
         // 这是旧代码ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "next-boundary.toml");
         // 神医缝合术：用最新的 modContainer 注册，并指定你的专属文件名喵！
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC, "next-boundary.toml");
+
+        modEventBus.addListener(this::registerNetwork);//手动把registerNetwork 挂载到模组总线上
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -122,12 +131,21 @@ public class main
             event.accept(EXAMPLE_BLOCK_ITEM);
     }
 
+    // 在 main.java 的 FMLCommonSetupEvent 或相关的 ServerStartingEvent 中加入
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
+
+        // 暴力开启服务器飞行权限
+        /*
+        event.getServer().setAllowFlight(true);
+        LOGGER.info("已通过代码强行开启服务器飞行权限喵！");*/
+        //显然这个方法行不通（
+        //为防其他飞行模组通过mixin注入强行启用飞行权限，故本模组不做强行启用飞行权限的注入，需要腐竹手动开启
+
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -143,4 +161,28 @@ public class main
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
     }
+
+    // 在 main.java 的 FMLCommonSetupEvent 或相关的 ServerStartingEvent 中加入
+
+
+
+
+
+    //@SubscribeEvent
+    public void registerNetwork(final RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar(main.MODID);
+
+        // 注册咱们的四元数同步包
+        registrar.playBidirectional(
+                SyncRotationPayload.TYPE,
+                SyncRotationPayload.STREAM_CODEC,
+                new DirectionalPayloadHandler<>(
+                        NetworkHandler::handleDataOnClient, // 客户端收到了怎么处理
+                        NetworkHandler::handleDataOnServer  // 服务端收到了怎么处理
+                )
+        );
+    }
+
+
+
 }

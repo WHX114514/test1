@@ -16,6 +16,7 @@ public class GlobalVariables {
 
     // 操纵相关 (核心状态位，千万别移走喵！)
     public static boolean B_LowGravity = false; // 当前是否处于无重力操作状态
+    public static float B_HitboxSize = 1.2f;//碰撞箱尺寸！
 
     // 矩阵转换代码
     public static Quaternionf currentQuat = new Quaternionf();
@@ -57,9 +58,23 @@ public class GlobalVariables {
     public static float B_Vz1 = 0.0f;
 
 
-    // ==========================================
-    // 🩺 视觉中枢变量：用于实现丝滑 FOV 切换
-    // ==========================================
+    // 用于实现丝滑 FOV 切换
+
     public static float prevFovModifier = 0.0f;    // 上一逻辑帧的旧值
     public static float currentFovModifier = 0.0f; // 当前逻辑帧的新值
+
+    // ==========================================
+    // 🩺 飞船机身独立控制变量
+    // ==========================================
+    public static float B_bodyx = 0.0f; // 身体的 Pitch (俯仰)
+    public static float B_bodyy = 0.0f; // 身体的 Yaw (偏航)
+    public static float B_bodyz = 0.0f; // 身体的 Roll (滚转)
+
+    // ==========================================
+    // 🩺 Mixin 底层通信变量
+    // ==========================================
+    public static boolean isPlayerRendering = false; // 是否正在渲染玩家
+    public static Object playerHead = null;          // 抓取原版的头骨对象
+    public static Object playerHat = null;           // 抓取原版的头盔对象
+    public static org.joml.Quaternionf headFixQuat = new org.joml.Quaternionf(); // 终极抵消矩阵
 }
