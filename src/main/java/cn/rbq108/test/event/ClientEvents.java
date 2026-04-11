@@ -88,7 +88,7 @@ public class ClientEvents {
             GlobalVariables.prevQuat.set(GlobalVariables.currentQuat);
 
             //调试断点：如果代码跑了，控制台会跳字的喵！ ---
-            // System.out.println("6DOF 姿态接管成功，动量已捕获喵！");111
+            // System.out.println("6DOF 姿态接管成功，动量已捕获喵！");
         }
 
         // 3. 抓拍完后，再让外部功能去跑它们的逻辑喵呜~
