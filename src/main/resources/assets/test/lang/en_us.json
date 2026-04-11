@@ -1,5 +1,6 @@
 {
-  "itemGroup.test": "Example Mod Tab",
+  "itemGroup.test": "NEXT Boundary:equipment",
   "block.test.example_block": "Example Block",
-  "item.test.example_item": "Example Item"
+  "item.test.example_item": "Example Item",
+  "item.test.basic_backpack": "basic backpack"
 }

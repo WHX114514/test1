@@ -10,7 +10,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-// 💥 重点：绝对不能加 value = Dist.CLIENT！必须让服务端（算物理的）也能跑这段代码！
+// 重点！绝对不能加 value = Dist.CLIENT！必须让服务端（负责算物理）也能跑这段代码！
 @EventBusSubscriber(modid = main.MODID)
 public class hitbox {
 
@@ -21,11 +21,11 @@ public class hitbox {
             float size = GlobalVariables.B_HitboxSize;
             // 锁定眼高，防止视角卡进方块窒息
 
-            // 🩺 定义你的“上移偏移量” (单位：格)
+            //定义“上移偏移量” (单位：格)
             // 你可以随时调这个数字，越大碰撞箱“看起来”就越高
             float offsetY = 0.5f;
 
-            // 💥 关键修改：眼高加上偏移量，让摄像头跟着升起来！
+            //关键修改：眼高加上偏移量，抬高摄像头
             event.setNewSize(EntityDimensions.scalable(size, size)
                     .withEyeHeight(size * 0.85f + offsetY));
 
@@ -33,8 +33,8 @@ public class hitbox {
         }
     }
 
-    // 🩺 2. 【核心修复】双端物理同步监工
-    // 这个事件会在客户端和服务端双端触发，彻底干掉那个“看不见的站立幽灵”！
+    //双端物理同步
+    // 这个事件会在客户端和服务端双端触发
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();

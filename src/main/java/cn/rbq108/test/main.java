@@ -1,5 +1,6 @@
 package cn.rbq108.test;
 
+import cn.rbq108.test.item.equipment.BasicBackpack;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -41,11 +42,24 @@ import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 // 自己手搓的通讯组件 (请确保包名和您之前写的一致喵！)
 import cn.rbq108.test.ServeMiao.communication.SyncRotationPayload;
 import cn.rbq108.test.ServeMiao.communication.NetworkHandler;
+// 1. 声明一个 Items 注册表喵！
+// 这里的 MODID 应该已经在你类里定义好了喵
+
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(main.MODID)
 public class main
 {
+    //不知道为什么后面加的代码要写在前面，但是塞后面会出问题（
+    //public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
+    //哦草原来这坨东西后面写过一次了
+
+
+    /*public static final DeferredHolder<Item, BasicBackpack> BASIC_BACKPACK =
+            ITEMS.register("basic_backpack", () -> new BasicBackpack());
+            为什么不能塞这里…？*/
+
+
     // Define mod id in a common place for everything to reference
     public static final String MODID = "test";
     // Directly reference a slf4j logger
@@ -66,14 +80,28 @@ public class main
     public static final DeferredItem<Item> EXAMPLE_ITEM = ITEMS.registerSimpleItem("example_item", new Item.Properties().food(new FoodProperties.Builder()
             .alwaysEdible().nutrition(1).saturationModifier(2f).build()));
 
+    public static final DeferredHolder<Item, BasicBackpack> BASIC_BACKPACK =
+            ITEMS.register("basic_backpack", () -> new BasicBackpack());//我寻思放这里他能运行，但是为什么能运行我就不知道了，穷举试出来的喵
+
     // Creates a creative tab with the id "test:example_tab" for the example item, that is placed after the combat tab
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
-            .title(Component.translatable("itemGroup.test"))
+            .title(Component.translatable("itemGroup.test")) // 栏位标题
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
+            // 1. 把图标换成你的背包喵！别再用那个黑紫格子了喵呜！
+            .icon(() -> BASIC_BACKPACK.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                // 2. 把背包塞进这里，玩家才能在创造模式找到它喵！
+                output.accept(BASIC_BACKPACK.get());
+
+                // 3. 把下面这行删掉，那个能吃的垃圾就不会再烦你咯喵~
+                // output.accept(EXAMPLE_ITEM.get());
             }).build());
+
+    /*public static final DeferredHolder<Item, BasicBackpack> BASIC_BACKPACK =
+            ITEMS.register("basic_backpack", () -> new BasicBackpack());
+            这坨东西本来该放在这里的，但是会红*/
+
+
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
@@ -182,6 +210,31 @@ public class main
                 )
         );
     }
+
+    /*public static final String MODID = "test";
+
+    // --- 💊 所有的注册表都必须放在这里，大括号里面喵！ ---
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
+
+    // 别忘了把你的背包也挪进来喵！
+    public static final DeferredHolder<Item, BasicBackpack> BASIC_BACKPACK =
+            ITEMS.register("basic_backpack", () -> new BasicBackpack());
+    // --------------------------------------------------
+
+    public main(IEventBus modEventBus) {
+        modEventBus.addListener(this::commonSetup);
+
+        // 这里的注册也是必不可少的喵！
+        ITEMS.register(modEventBus);
+
+        // ... 其他代码 ...
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        // ...
+    }*/
+
+
 
 
 
