@@ -54,6 +54,7 @@ B_INz
 是否启用主动停滞（bool）        B_hold
 主动停滞力度倍率（0-100，int）  B_HoldMultiplier
 是否启用无重力操作（bool）      B_LowGravity
+无重力操作的开关是否由本模组负责  B_CanBackpackGrantGravity  （设为false后就由附属模组接手，设为true就是本模组负责，穿戴背包就启用无重力）
 重力加速度                    B_g
 
 吸附相关（p是Paste缩写，当初在纸上写代码的时候实在想不出用啥词就选了这个勾史）
@@ -93,3 +94,5 @@ B_bodyz
 碰撞箱相关
 碰撞箱尺寸 B_HitboxSize
 //截止至2026.4.5 17：55
+
+

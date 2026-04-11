@@ -6,7 +6,7 @@ public class debug {
     // ==========================================
 
     // 强制全局开启无重力模式
-    public static boolean FORCE_LOW_GRAVITY = true;
+    public static boolean FORCE_LOW_GRAVITY = false;//false.trus
 
     // 强制开启主动制动（即使没按刹车键，松手也自动减速）
     // 把它搬到这里后，你测试手感就方便多了喵！

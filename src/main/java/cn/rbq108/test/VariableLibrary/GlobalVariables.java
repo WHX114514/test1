@@ -77,4 +77,11 @@ public class GlobalVariables {
     public static Object playerHead = null;          // 抓取原版的头骨对象
     public static Object playerHat = null;           // 抓取原版的头盔对象
     public static org.joml.Quaternionf headFixQuat = new org.joml.Quaternionf(); // 终极抵消矩阵
+
+
+    public static boolean B_CanBackpackGrantGravity = true;//负责控制“重力切换”这个功能是由本模组负责还是其他依依妖妖的附属模组负责，等加入附属模组的时候要把这个量设为false
+
+    // 在
+    public static boolean prevLowGravity = false; // 用来记录上一帧是不是低重力喵
+
 }

@@ -61,6 +61,46 @@ public class ClientEvents {
         var player = mc.player;
         if (player == null) return;
 
+        // --- 🩺 龙女神医的“原子化抓拍”：不再依赖外部修改喵！ ---
+        // 1. 这一帧我们自己实时感应背包状态喵呜~
+        boolean isWearingBackpack = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST)
+                .is(cn.rbq108.test.main.BASIC_BACKPACK.get());
+        boolean currentRealState = cn.rbq108.test.VariableLibrary.debug.FORCE_LOW_GRAVITY || isWearingBackpack;
+
+        // 2. 核心：对比【上一帧】留下的记录，捕捉跳变瞬间喵！
+        if (currentRealState && !GlobalVariables.prevLowGravity) {
+            // 抓拍开启瞬间的原版动量喵！
+            var currentMotion = player.getDeltaMovement();
+
+            // 按照 1.21.1 的物理阻力系数乘回来，保证动量守恒喵
+            GlobalVariables.B_Vx1 = (float) currentMotion.x * 0.91f;
+            GlobalVariables.B_Vy1 = (float) currentMotion.y * 0.80f;
+            GlobalVariables.B_Vz1 = (float) currentMotion.z * 0.91f;
+
+            // 初始化四元数起点，防止旋转闪退喵
+            GlobalVariables.currentQuat.rotationYXZ(
+                    (float) Math.toRadians(-player.getYRot()),
+                    (float) Math.toRadians(player.getXRot()),
+                    0.0f
+            );
+
+            // 强制同步上一帧四元数，防止第一帧画面闪烁喵
+            GlobalVariables.prevQuat.set(GlobalVariables.currentQuat);
+
+            //调试断点：如果代码跑了，控制台会跳字的喵！ ---
+            // System.out.println("6DOF 姿态接管成功，动量已捕获喵！");
+        }
+
+        // 3. 抓拍完后，再让外部功能去跑它们的逻辑喵呜~
+        cn.rbq108.test.motion.GravityClose.updateGravityState();
+        cn.rbq108.test.motion.Rush.updateRushState();
+
+        // 4. 确保 B_LowGravity 始终跟随我们的感应状态喵！
+        GlobalVariables.B_LowGravity = currentRealState;
+
+        // 备份记录，给下一帧用喵呜！
+        GlobalVariables.prevLowGravity = GlobalVariables.B_LowGravity;
+
         cn.rbq108.test.motion.GravityClose.updateGravityState();
         cn.rbq108.test.motion.Rush.updateRushState();
 
@@ -70,6 +110,34 @@ public class ClientEvents {
         if (cn.rbq108.test.VariableLibrary.debug.FORCE_LOW_GRAVITY) {
             GlobalVariables.B_LowGravity = true;
         }
+
+        /*// 只在开启瞬间抓拍一次喵！ ---
+        if (GlobalVariables.B_LowGravity && !GlobalVariables.prevLowGravity) {
+            // 抓拍开启瞬间的原版动量喵呜~
+            var currentMotion = player.getDeltaMovement();
+
+            // 1. 速度接管（地面参考系直接赋值喵！）
+            // 乘回 0.91f 是为了抵消你后面物理注入时的除法喵
+            GlobalVariables.B_Vx1 = (float) currentMotion.x * 0.91f;
+            GlobalVariables.B_Vy1 = (float) currentMotion.y * 0.80f;
+            GlobalVariables.B_Vz1 = (float) currentMotion.z * 0.91f;
+
+            // 2. 姿态对齐（【重点】只在这一帧对齐一次，绝不干扰后面的 Roll 轴喵！）
+            GlobalVariables.currentQuat.rotationYXZ(
+                    (float) Math.toRadians(-player.getYRot()),
+                    (float) Math.toRadians(player.getXRot()),
+                    0.0f
+            );
+
+
+        }
+        // 这一行必须写，用来标记“已经处理过开启瞬间了”喵！
+        GlobalVariables.prevLowGravity = GlobalVariables.B_LowGravity;*/
+
+
+        // --- 剩下的逻辑请保持你原来的样子，一个字母都别改喵呜！ ---
+
+
 
         if (GlobalVariables.B_LowGravity) {
             // ==========================================
