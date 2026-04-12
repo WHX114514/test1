@@ -42,6 +42,8 @@ public class ClientEvents {
         var mc = Minecraft.getInstance();
         if (mc.player == null || !GlobalVariables.B_LowGravity) return;
 
+
+
         // 彻底屏蔽原版按键动作
         while (mc.options.keyShift.consumeClick()) {}
         while (mc.options.keySprint.consumeClick()) {}
@@ -213,6 +215,11 @@ public class ClientEvents {
                     GlobalVariables.B_Vy1 / 0.80f,
                     GlobalVariables.B_Vz1 / 0.91f
             );
+
+            // 在 player.setDeltaMovement 后面加上这行喵！
+            if (GlobalVariables.B_LowGravity) {
+                cn.rbq108.test.rendering.spawnRcsParticle.processRcs(player);
+            }
 
         } else {
             // 落地回正逻辑
