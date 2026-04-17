@@ -13,6 +13,10 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.world.level.GameType;
+import net.minecraft.client.Minecraft;
+
+
 
 @EventBusSubscriber(modid = main.MODID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -222,6 +226,22 @@ public class ClientEvents {
             }
 
         } else {
+            //player.getAbilities().mayfly = false;
+            //player.getAbilities().flying = false;
+            GameType gameMode = null;
+            if (Minecraft.getInstance().gameMode != null) {
+                gameMode = Minecraft.getInstance().gameMode.getPlayerMode();
+            }
+            if(gameMode == GameType.SURVIVAL || gameMode == GameType.ADVENTURE){
+                player.getAbilities().flying = false;
+                player.getAbilities().mayfly = false;
+
+                player.onUpdateAbilities();
+
+                //System.out.println("飞行权限已收回1144556677889911");
+
+            }
+
             // 落地回正逻辑
             GlobalVariables.currentRollVelocity = 0.0f;
             control.B_INroll = 0;

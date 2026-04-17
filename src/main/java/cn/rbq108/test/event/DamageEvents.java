@@ -1,4 +1,4 @@
-package cn.rbq108.test.event;
+/*package cn.rbq108.test.event;
 
 import cn.rbq108.test.main;
 import cn.rbq108.test.VariableLibrary.GlobalVariables; // ⚠️ 神医提醒：必须导入你的记事本喵！
@@ -44,4 +44,4 @@ public class DamageEvents {
             }
         }
     }
-}
+}//*/

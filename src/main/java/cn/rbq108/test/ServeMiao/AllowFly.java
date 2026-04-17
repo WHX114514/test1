@@ -2,7 +2,9 @@ package cn.rbq108.test.ServeMiao;
 
 import cn.rbq108.test.main;
 import cn.rbq108.test.VariableLibrary.GlobalVariables;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -16,9 +18,29 @@ public class AllowFly {
     public static void onPlayerTick(PlayerTickEvent.Post event) { // 🩺 重点在这里！加个 .Post
         Player player = event.getEntity();
 
+        /*不是这个if在这有任何卵用吗？
         if (!player.getAbilities().mayfly) {
             player.getAbilities().mayfly = true;
             player.onUpdateAbilities();
+        }*//*else{
+            player.getAbilities().mayfly = false;
+            player.onUpdateAbilities();
+        }*/
+        GameType gameMode = null;
+        if (Minecraft.getInstance().gameMode != null) {
+            gameMode = Minecraft.getInstance().gameMode.getPlayerMode();
+        }//我写的这是啥？
+        if (GlobalVariables.B_LowGravity) {
+            player.getAbilities().mayfly = true;//zheli!
+            player.onUpdateAbilities();
+        } else if (GlobalVariables.B_LowGravity == false && (gameMode == GameType.SURVIVAL || gameMode == GameType.ADVENTURE)) {
+            player.getAbilities().mayfly = false;
+            //System.out.println("设置后(调用前)1: " + player.getAbilities().mayfly);
+            //可能是时序问题？注释掉这两个println后就没用了，必须加一个sleep才能用，或者重新把这个println弄回来
+            //try { Thread.sleep(1); } catch (InterruptedException e) {}
+            player.onUpdateAbilities();
+            //System.out.println("调用后2: " + player.getAbilities().mayfly);
+
         }
 
 
