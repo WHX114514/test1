@@ -36,7 +36,7 @@ public class AllowFly {
         } else if (GlobalVariables.B_LowGravity == false && (gameMode == GameType.SURVIVAL || gameMode == GameType.ADVENTURE)) {
             player.getAbilities().mayfly = false;
             //System.out.println("设置后(调用前)1: " + player.getAbilities().mayfly);
-            //可能是时序问题？注释掉这两个println后就没用了，必须加一个sleep才能用，或者重新把这个println弄回来
+            //可能是时序问题？注释掉这两个println后就没用了，必须加一个sleep才能用，或者重新把这个println弄回来？
             //try { Thread.sleep(1); } catch (InterruptedException e) {}
             player.onUpdateAbilities();
             //System.out.println("调用后2: " + player.getAbilities().mayfly);
