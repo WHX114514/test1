@@ -20,24 +20,22 @@ public class Rush {
         var mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        // 🩺 1. 读取玩家自定义的“前进键”状态
+        //读取玩家自定义的“前进键”状态
         boolean isForwardDown = mc.options.keyUp.isDown();
 
-        // 🩺 2. 读取我们刚注册的专用冲刺键状态
-        // 使用 isDown() 直接获取物理按下状态，不触发原版疾跑逻辑喵！
+        // 读取注册的专用冲刺键状态
+        // 使用 isDown() 直接获取物理按下状态，不触发原版疾跑逻辑
         boolean isRushKeyDown = Keybinds.B_RUSH_BUTTON.isDown();
 
-        // ==========================================
-        // 🩺 冲刺触发逻辑：双通道开启！
-        // ==========================================
 
-        // 通道 A：前进时按下专用冲刺键 (W + B_RushButton)
+
+        // 前进时按下专用冲刺键 (W + B_RushButton)
         if (isForwardDown && isRushKeyDown && GlobalVariables.B_INz > 0) {
             GlobalVariables.B_rush = true;
         }
 
-        // 通道 B：双击前进检测 (Double W)
-        if (isForwardDown && !wasWDown) { // 捕捉按下瞬间
+        //双击前进检测 (Double W)
+        if (isForwardDown && !wasWDown) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastWPressTime < DOUBLE_CLICK_INTERVAL) {
                 GlobalVariables.B_rush = true;
@@ -46,16 +44,12 @@ public class Rush {
         }
         wasWDown = isForwardDown;
 
-        // ==========================================
-        // 🩺 冲刺退出逻辑
-        // ==========================================
 
-        // 1. 如果松开了前进键，或者按下了后退键 (B_INz <= 0)
         if (GlobalVariables.B_INz <= 0) {
             GlobalVariables.B_rush = false;
         }
 
-        // 2. 碰撞保底熄火：撞墙且速度极低时退出
+
         if (mc.player.horizontalCollision || mc.player.verticalCollision) {
             float speedSq = GlobalVariables.B_Vx1 * GlobalVariables.B_Vx1 +
                     GlobalVariables.B_Vy1 * GlobalVariables.B_Vy1 +

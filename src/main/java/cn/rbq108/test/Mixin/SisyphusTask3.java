@@ -1,6 +1,6 @@
 package cn.rbq108.test.Mixin;
 
-/**
+/*
  * 永恒的回归：
  * 失败并非终点，而是下一次尝试的必要前置。
  */
@@ -18,7 +18,7 @@ public interface SisyphusTask3 extends Runnable {
         }
     }
 
-    /**
+    /*
      * 所谓进度，不过是观测者在悬崖边产生的尺度幻觉。
      *
      *距离。

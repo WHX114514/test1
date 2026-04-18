@@ -27,22 +27,22 @@ public class model {
 
             float pt = event.getPartialTick();
 
-            // 🩺 1. 补帧插值：获取平滑角度
+            // 补帧插值获取平滑角度
             float renderX = Mth.lerp(pt, trunk.prevSmoothX, trunk.smoothX);
             float renderY = Mth.lerp(pt, trunk.prevSmoothY, trunk.smoothY);
             float renderZ = Mth.lerp(pt, trunk.prevSmoothZ, trunk.smoothZ);
 
-            // 🩺 2. 计算当前碰撞箱中心点 (这就是报错的那个变量喵！)
+            // 计算当前碰撞箱中心点（这破变量报错过无数次了！）
             float currentHitboxHeight = player.getBbHeight();
             float centerY = currentHitboxHeight * 0.5f;
 
-            // 🩺 3. 构造身体四元数 (YXZ 顺序)
+            // 构造身体四元数 (YXZ 顺序)
             Quaternionf bodyQuat = new Quaternionf()
                     .rotateY((float) Math.toRadians(-renderY))
                     .rotateX(-(float) Math.toRadians(-renderX))
                     .rotateZ((float) Math.toRadians(renderZ));
 
-            // 🩺 4. 冰冻动画锁
+            // 这是啥，冻结数据吗
             oldXRot = player.getXRot(); oldXRotO = player.xRotO;
             oldYBodyRot = player.yBodyRot; oldYBodyRotO = player.yBodyRotO;
             oldYHeadRot = player.yHeadRot; oldYHeadRotO = player.yHeadRotO;
@@ -50,14 +50,14 @@ public class model {
             player.yBodyRot = 0f; player.yBodyRotO = 0f;
             player.yHeadRot = 0f; player.yHeadRotO = 0f;
 
-            // 🩺 5. 激活 Mixin 锁头通信
+            //Mixin锁头
             GlobalVariables.isPlayerRendering = true;
             if (event.getRenderer() instanceof PlayerRenderer renderer) {
                 GlobalVariables.playerHead = renderer.getModel().head;
                 GlobalVariables.playerHat = renderer.getModel().hat;
             }
 
-            // 🩺 6. 计算头身隔离矩阵
+            // 计算头身隔离矩阵
             Quaternionf camQuat = new Quaternionf(GlobalVariables.prevQuat).slerp(GlobalVariables.currentQuat, pt);
             Quaternionf y180 = new Quaternionf().rotateY((float) Math.PI);
             Quaternionf z180 = new Quaternionf().rotateZ((float) Math.PI);
@@ -66,7 +66,7 @@ public class model {
                     .mul(new Quaternionf(bodyQuat).invert())
                     .mul(camQuat).mul(y180).mul(z180);
 
-            // 🩺 7. 应用渲染 (身箱合一逻辑)
+            // 应用渲染 (身箱合一逻辑)
             PoseStack poseStack = event.getPoseStack();
             poseStack.pushPose();
 
@@ -82,11 +82,11 @@ public class model {
     public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
         if (event.getEntity() instanceof LocalPlayer player && GlobalVariables.B_LowGravity) {
 
-            // 🩺 8. 弹出矩阵
+            // 弹出矩阵
             event.getPoseStack().popPose();
             GlobalVariables.isPlayerRendering = false;
 
-            // 🩺 9. 解冻数值
+            // 解冻数值
             player.setXRot(oldXRot); player.xRotO = oldXRotO;
             player.yBodyRot = oldYBodyRot; player.yBodyRotO = oldYBodyRotO;
             player.yHeadRot = oldYHeadRot; player.yHeadRotO = oldYHeadRotO;

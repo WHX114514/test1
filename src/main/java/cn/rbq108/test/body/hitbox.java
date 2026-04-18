@@ -14,7 +14,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 @EventBusSubscriber(modid = main.MODID)
 public class hitbox {
 
-    // 🩺 1. 尺寸定义工厂
+    // 尺寸定义
     @SubscribeEvent
     public static void onPlayerSize(EntityEvent.Size event) {
         if (event.getEntity() instanceof Player && GlobalVariables.B_LowGravity) {
@@ -22,10 +22,10 @@ public class hitbox {
             // 锁定眼高，防止视角卡进方块窒息
 
             //定义“上移偏移量” (单位：格)
-            // 你可以随时调这个数字，越大碰撞箱“看起来”就越高
+            // 可以随时调这个数字，越大碰撞箱“看起来”就越高
             float offsetY = 0.5f;
 
-            //关键修改：眼高加上偏移量，抬高摄像头
+            //眼高加上偏移量，抬高摄像头
             event.setNewSize(EntityDimensions.scalable(size, size)
                     .withEyeHeight(size * 0.85f + offsetY));
 
@@ -44,12 +44,12 @@ public class hitbox {
             player.setPose(Pose.STANDING);
             //player.setPose(Pose.SWIMMING);
 
-            // 💥 智能刷新：如果服务端的盒子还没缩短，强制刷新！
+            // 如果服务端碰撞箱还没改，强制刷新
             if (Math.abs(player.getBbHeight() - GlobalVariables.B_HitboxSize) > 0.01f) {
                 player.refreshDimensions();
             }
         } else {
-            // 💥 智能恢复：如果关了失重，但盒子还是小的，强制变回原状！
+            // 如果关闭失重操作，但盒子还是小的，强制变回原状
             if (Math.abs(player.getBbHeight() - GlobalVariables.B_HitboxSize) < 0.01f) {
                 player.refreshDimensions();
             }

@@ -6,7 +6,7 @@ public class VoidManager {
     }
 
     private VoidManager() {
-        // 一二七七 二二七
+        // 一二七七 二二七（？）
     }
 
     public static VoidManager getInstance() {

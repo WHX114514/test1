@@ -12,11 +12,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HumanoidModel.class)
 public abstract class FlightPostureMixin {
-    // 🩺 注入点选在 setupAnim 的末尾 (TAIL)，这样原版算完什么，我们都能瞬间改掉喵！
+    // 注入点选在 setupAnim 的末尾 (TAIL)，避免原版给咱占了
     @Inject(method = "setupAnim", at = @At("TAIL"))
     private void onSetupAnimTail(LivingEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
         if (GlobalVariables.B_LowGravity && entity instanceof Player) {
-            // 直接调用你在 motion 类里写的绝对控制逻辑喵呜！
+            //调用motion类里写的绝对控制逻辑
             motion.applyFlightPosture((HumanoidModel)(Object)this);
         }
     }

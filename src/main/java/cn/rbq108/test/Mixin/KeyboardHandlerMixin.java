@@ -27,7 +27,6 @@ public class KeyboardHandlerMixin {
 
             if ((isInventoryKey || isDropKey) && !isShiftDown) {
                 // 核心：在 HEAD 处直接取消原版方法的执行！
-                // 这下游戏根本不知道你按了 E 或 Q，只有我们的旋转逻辑在偷偷运行喵呜！
                 ci.cancel();
             }
         }

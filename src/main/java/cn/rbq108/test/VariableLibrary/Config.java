@@ -15,9 +15,9 @@ public class Config {
         PHYSICS = specPair.getLeft();
     }
 
-    // ==========================================
-    // 神医的飞船物理参数调教中心喵！
-    // ==========================================
+
+    // 字面意思啊config读取部分
+
     public static class PhysicsSettings {
 
         public final ModConfigSpec.DoubleValue rollSpeed;

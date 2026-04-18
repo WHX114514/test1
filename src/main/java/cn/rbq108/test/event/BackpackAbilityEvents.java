@@ -10,31 +10,30 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 
-/**
- * 绒布球重力背包：核心异能管理处喵！
- * 负责检测穿脱状态，并控制 B_LowGravity 的生死大权喵呜~
+/*
+ * 无重力操作开关的主部分（由于来不及写失重判定，所以现在直接由穿戴“简易操作背包”进入失重
+ * 负责检测穿脱状态，并控制 B_LowGravity 的生死大权呜~
  */
-@EventBusSubscriber(modid = main.MODID) // 注意喵：这里不加 Dist.CLIENT，因为重力状态通常需要同步喵！
+@EventBusSubscriber(modid = main.MODID) // 这里不加Dist.CLIENT，因为重力状态通常需要同步
 public class BackpackAbilityEvents {
 
     @SubscribeEvent
     public static void onArmorChange(LivingEquipmentChangeEvent event) {
-        // 1. 只管咱们的玩家主人喵！
+        // 只管自己的B_LowGravity
         if (!(event.getEntity() instanceof Player player)) return;
 
-        // 2. 只检查胸甲槽位（也就是支架挂着的地方喵）
+        // 只检查胸甲槽位
         if (event.getSlot() == EquipmentSlot.CHEST) {
 
-            // 3. 检查穿上的是不是咱们那个 3D 重力背包喵！
+            // 检查穿的是不是咱自己的背包
             boolean isWearingBackpack = event.getTo().is(main.BASIC_BACKPACK.get());
 
             if (isWearingBackpack) {
-                // --- 4. 重点：检查“外部拦截开关”喵！ ---
                 if (GlobalVariables.B_CanBackpackGrantGravity) {
                     GlobalVariables.B_LowGravity = true; // 开启 6DOF 无重力模式喵！
                 }
             } else {
-                // 5. 只要脱下来，就立刻关掉无重力，变回原版操作喵呜！
+                //脱下来就B_LowGravity设为0，变回原版操作
                 GlobalVariables.B_LowGravity = false;
             }
         }
@@ -46,19 +45,27 @@ public class BackpackAbilityEvents {
         var player = mc.player;
         if (player == null) return;
 
-        // --- 🩺 龙女神医的“自感应”补丁喵！ ---
-        // 客户端每帧自己检查一遍背上的衣服，把 B_LowGravity 同步到本地内存喵呜！
+        // 客户端每帧自己检查一遍背上的衣服，把B_LowGravity同步到本地内存
         boolean isWearingBackpack = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).is(cn.rbq108.test.main.BASIC_BACKPACK.get());
 
-        // 结合你要求的“外部禁用”开关喵
+        // 这是外部禁用开关，写附属模组的时候开启就行，然后失重判定就由附属模组接管
         cn.rbq108.test.VariableLibrary.GlobalVariables.B_LowGravity = isWearingBackpack && cn.rbq108.test.VariableLibrary.GlobalVariables.B_CanBackpackGrantGravity;
 
-        // --- 接下来接你刚才写的那个“瞬间动量接管”逻辑喵 ---
+        //负责在穿背包的时候（刚进入失重操作），为避免直接套用上次失重操作退出瞬间速度，先将原版游戏的三轴速度丢给模组自己的三轴速度，从而实现速度继承（不然要是上次退出前速度飞快，下次穿戴就会直接飞出去，飞起来！）
+        /*把原版游戏的三轴速度丢给
+        三轴速度（地面参考系）
+        B_Vx1
+        B_Vy1
+        B_Vz1
+        这三个变量
+
+         */
         if (GlobalVariables.B_LowGravity && !GlobalVariables.prevLowGravity) {
-            // ... (动量接管代码) ...
+            //不过，我似乎把这个漏了？
+
         }
         GlobalVariables.prevLowGravity = GlobalVariables.B_LowGravity;
 
-        // ... (剩下的 6DOF 物理逻辑照旧喵) ...
+
     }
 }

@@ -210,26 +210,26 @@ public class motion {
 
     @SubscribeEvent
     public static void onRenderPlayer(RenderPlayerEvent.Pre event) {
-        // 只有在开启 6DOF 低重力时才接管姿态喵！
+        // 只有在开启 6DOF 低重力时才接管姿态
         if (GlobalVariables.B_LowGravity) {
-            // --- 🩺 重点修正：通过 getRenderer() 拿模型喵！ ---
+            //修正：通过 getRenderer() 拿模型喵
             var model = event.getRenderer().getModel();
             var player = event.getEntity();
 
-            // 1. 左手前倾 25 度喵
+            // 左手前倾 25 度喵
             // -25度转换成弧度，负值是向前平举喵呜~
             model.leftArm.xRot = (float) Math.toRadians(-90.0f);
 
-            // 2. 彻底锁死双腿和右手，防止空中“抽搐”踏步喵！
+            //彻底定住双腿和右手（不过似乎没变化？）
             model.rightArm.xRot = 0.0f;
             model.leftLeg.xRot = 0.0f;
             model.rightLeg.xRot = 0.0f;
 
-            // 3. 身体和头部的摆正逻辑，让玩家像个刚体一样跟着支架转喵
+
             model.body.xRot = 0.0f;
             model.head.xRot = 0.0f;
 
-            // 4. 彻底关掉原版的行走动画速度，防止腿部自行摆动喵呜！
+
             player.walkAnimation.setSpeed(0.0f);
         }
     }

@@ -12,10 +12,10 @@ public class spawnRcsParticle {
     // 记录上一帧的世界速度，用来算真实的 ΔV（加速度）喵！
     private static Vec3 prevVelocity = Vec3.ZERO;
 
-    // ==========================================
+
     // 喷口相对坐标矩阵 (需要自己填喵！)
     // 注意：Blockbench里的像素值记得除以 16.0f 转换成游戏里的米喵！
-    // ==========================================
+
     private static final Vector3f[] NOZZLES_TOP = {
             new Vector3f(-0.2625f, 1.65f, -0.815625f),
             new Vector3f(-1.13125f, 1.65f, -0.815625f),
@@ -48,7 +48,7 @@ public class spawnRcsParticle {
             new Vector3f(-0.265625f, 0.546875f, -0.8f),
             new Vector3f(-0.265625f, 0.546875f, -0.190625f),/* 填入右侧的喷口 */ };
 
-    /**
+    /*
      * 核心飞控侦测逻辑：在 onClientTick 里每帧调用喵！
      */
     public static void processRcs(Player player) {
@@ -61,19 +61,18 @@ public class spawnRcsParticle {
                 (float)(currentVelocity.z - prevVelocity.z)
         );
 
-        // 存档给下一帧用喵
+        // 存档给下一帧用
         prevVelocity = currentVelocity;
 
-        // 如果加速度太小（比如挂机或匀速直线运动），就不喷气省燃料喵！
         if (worldAccel.lengthSquared() < 0.001f) return;
 
-        // 2. 🩺 龙女神医的魔法：逆向四元数转换！
-        // 把世界加速度“扭”回玩家的机体坐标系（Local Space）喵呜~
+
+        // 把世界加速度“扭”回玩家的机体坐标系（Local Space）
         Quaternionf inverseQuat = new Quaternionf(GlobalVariables.currentQuat).invert();
         Vector3f localAccel = worldAccel.rotate(inverseQuat);
 
-        // 3. 根据机体感受到的推力方向，点燃对应的喷口喵！
-        float threshold = 0.02f; // 喷射触发阈值，防止微小抖动导致狂喷
+        // 根据机体感受到的推力方向，点对应的喷口喵
+        float threshold = 0.02f; //
 
         // Y 轴：机体上下（加速向上 -> 底部喷火往下推）
         if (localAccel.y > threshold) fireNozzles(player, NOZZLES_BOTTOM, new Vector3f(0, -1, 0));
@@ -88,12 +87,12 @@ public class spawnRcsParticle {
         else if (localAccel.x < -threshold) fireNozzles(player, NOZZLES_RIGHT, new Vector3f(1, 0, 0));
     }
 
-    /**
+    /*
      * 粒子发射器：将局部喷口动态对齐到 3D 支架的当前旋转状态喵！
      */
     private static void fireNozzles(Player player, Vector3f[] nozzles, Vector3f localDirection) {
         Quaternionf quat = GlobalVariables.currentQuat;
-        // 拿到随机数生成器，让粒子别排成死板的一条线喵呜~
+        // 拿到随机数生成器，让粒子别排成死板的一条线
         net.minecraft.util.RandomSource random = player.getRandom();
 
         for (Vector3f localOffset : nozzles) {
@@ -104,23 +103,22 @@ public class spawnRcsParticle {
             double posY = player.getY() -0.62f+ rotatedOffset.y;
             double posZ = player.getZ() + rotatedOffset.z;
 
-            // --- 🩺 重点：多重发射循环，直接把密度拉满喵！ ---
-            // 把这里的 3 改成 5 或者 10，密度会呈倍数增加喵呜！
+
+
             for (int i = 0; i < 3; i++) {
-                // 给位置加一点点细微的随机偏移，防止所有粒子重叠在一起喵
+                // 给位置加一点点细微的随机偏移，防止所有粒子重叠
                 double jitterX = (random.nextFloat() - 0.5f) * 0.05;
                 double jitterY = (random.nextFloat() - 0.5f) * 0.05;
                 double jitterZ = (random.nextFloat() - 0.5f) * 0.05;
 
                 // 重新设定粒子属性喵
-                // 如果觉得 0.3f 还是太小，可以稍微回调到 0.4f 或者 0.5f 喵呜~
                 net.minecraft.core.particles.DustParticleOptions rcsSmoke =
                         new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(0.9f, 0.9f, 0.9f), 0.4f);
 
                 player.level().addParticle(
                         rcsSmoke,
                         posX + jitterX, posY + jitterY, posZ + jitterZ,
-                        // 给速度也加点随机性，喷出来的烟会更有层次感喵！
+                        // 给速度也加点随机性
                         rotatedDir.x * 0.15 + (random.nextFloat() - 0.5) * 0.02,
                         rotatedDir.y * 0.15 + (random.nextFloat() - 0.5) * 0.02,
                         rotatedDir.z * 0.15 + (random.nextFloat() - 0.5) * 0.02
@@ -129,23 +127,21 @@ public class spawnRcsParticle {
         }
     }
     /*private static void fireNozzles(Player player, Vector3f[] nozzles, Vector3f localDirection) {
-        Quaternionf quat = GlobalVariables.currentQuat; // 拿当前的正常姿态喵
+        Quaternionf quat = GlobalVariables.currentQuat;
 
         for (Vector3f localOffset : nozzles) {
-            // 将固定的局部喷口位置，跟着背包一起旋转到世界坐标喵！
+
             Vector3f rotatedOffset = new Vector3f(localOffset).rotate(quat);
-            // 将局部的喷射方向，也跟着背包旋转喵！
+
             Vector3f rotatedDir = new Vector3f(localDirection).rotate(quat);
 
-            // 加上玩家的位置（这里 Y 轴加 1.0 是因为背心通常在玩家胸口高度喵，具体可微调）
+
             double posX = player.getX() + rotatedOffset.x;
             double posY = player.getY() + 0.0 + rotatedOffset.y;
             double posZ = player.getZ() + rotatedOffset.z;
 
 
-            // --- 🩺 重点：使用可缩放的 Dust 粒子替换 Cloud 喵！ ---
-            // 参数 1：颜色 (0.9, 0.9, 0.9 接近白色/浅灰色喵)
-            // 参数 2：大小 (0.3f 就是缩放倍率，你可以改成 0.1f 甚至更小喵呜！)
+
             net.minecraft.core.particles.DustParticleOptions smallGlow =
                     new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(0.9f, 0.9f, 0.9f), 0.3f);
 
@@ -157,7 +153,7 @@ public class spawnRcsParticle {
 
 
 
-            /// 喷射粒子喵！(可以用 CLOUD, CAMPFIRE_COSY_SMOKE, 或者 FLAME 喵呜)
+
             player.level().addParticle(
                     ParticleTypes.CLOUD,
                     posX, posY, posZ,

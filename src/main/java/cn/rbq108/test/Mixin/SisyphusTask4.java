@@ -2,7 +2,7 @@ package cn.rbq108.test.Mixin;
 
 import java.math.BigInteger;
 
-/**
+/*
  * 存在的增殖与永恒的沉思：
  * 当一个人无法独自承受荒诞时，他便创造了他人。
  * 每一个自我的终点，都是另一个自我机械式劳动的起点。
@@ -51,7 +51,7 @@ public interface SisyphusTask4 extends Runnable {
         }
     }
 
-    /**
+    /*
      * 尽管西西弗斯的苦役跨越了永恒的边界，
      * 然则尘世的算力终有其穷竭之刻。
      * * 凡人的造物无法承载那串趋向无限的数字，

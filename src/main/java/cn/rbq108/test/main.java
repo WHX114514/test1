@@ -39,11 +39,10 @@ import cn.rbq108.test.VariableLibrary.Config;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
-// 自己手搓的通讯组件 (请确保包名和您之前写的一致喵！)
+// 自己搓的通讯组件
 import cn.rbq108.test.ServeMiao.communication.SyncRotationPayload;
 import cn.rbq108.test.ServeMiao.communication.NetworkHandler;
-// 1. 声明一个 Items 注册表喵！
-// 这里的 MODID 应该已经在你类里定义好了喵
+// 这里的 MODID 在类里已经定义好了
 
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -87,19 +86,20 @@ public class main
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.test")) // 栏位标题
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            // 1. 把图标换成你的背包喵！别再用那个黑紫格子了喵呜！
+            //把图标换成你的背包（反正只有这一个东西）
             .icon(() -> BASIC_BACKPACK.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                // 2. 把背包塞进这里，玩家才能在创造模式找到它喵！
+                // 把背包塞进这里，仅创造才能拿
                 output.accept(BASIC_BACKPACK.get());
 
-                // 3. 把下面这行删掉，那个能吃的垃圾就不会再烦你咯喵~
+                //这是自带的一个能吃的怪东西，不知道意义何在）
                 // output.accept(EXAMPLE_ITEM.get());
             }).build());
 
     /*public static final DeferredHolder<Item, BasicBackpack> BASIC_BACKPACK =
             ITEMS.register("basic_backpack", () -> new BasicBackpack());
-            这坨东西本来该放在这里的，但是会红*/
+            这坨东西本来该放在这里的，但是会红
+            */
 
 
 
@@ -129,10 +129,10 @@ public class main
         //这是默认的配置文件，用不着了
         //modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
-        // 神医挂号：注册我们的配置文件！
-        // 这样游戏启动时，就会在 config 文件夹里自动生成一个 next-boundary.toml 喵！
+        // 注册配置文件
+        // 游戏启动时，就会在 config 文件夹里自动生成一个 next-boundary.toml
         // 这是旧代码ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "next-boundary.toml");
-        // 神医缝合术：用最新的 modContainer 注册，并指定你的专属文件名喵！
+        // 用最新的modContainer注册
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC, "next-boundary.toml");
 
         modEventBus.addListener(this::registerNetwork);//手动把registerNetwork 挂载到模组总线上
@@ -170,7 +170,7 @@ public class main
         // 暴力开启服务器飞行权限
         /*
         event.getServer().setAllowFlight(true);
-        LOGGER.info("已通过代码强行开启服务器飞行权限喵！");*/
+        LOGGER.info("开开开开开开！2341654654");*/
         //显然这个方法行不通（
         //为防其他飞行模组通过mixin注入强行启用飞行权限，故本模组不做强行启用飞行权限的注入，需要腐竹手动开启
 
@@ -200,7 +200,7 @@ public class main
     public void registerNetwork(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(main.MODID);
 
-        // 注册咱们的四元数同步包
+        // 注册四元数同步包
         registrar.playBidirectional(
                 SyncRotationPayload.TYPE,
                 SyncRotationPayload.STREAM_CODEC,
@@ -213,25 +213,25 @@ public class main
 
     /*public static final String MODID = "test";
 
-    // --- 💊 所有的注册表都必须放在这里，大括号里面喵！ ---
+
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
 
-    // 别忘了把你的背包也挪进来喵！
+
     public static final DeferredHolder<Item, BasicBackpack> BASIC_BACKPACK =
             ITEMS.register("basic_backpack", () -> new BasicBackpack());
-    // --------------------------------------------------
+
 
     public main(IEventBus modEventBus) {
         modEventBus.addListener(this::commonSetup);
 
-        // 这里的注册也是必不可少的喵！
+
         ITEMS.register(modEventBus);
 
-        // ... 其他代码 ...
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        // ...
+        //？
     }*/
 
 

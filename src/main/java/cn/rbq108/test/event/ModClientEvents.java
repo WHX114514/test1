@@ -12,7 +12,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 public class ModClientEvents {
 
 
-    public static boolean B_CanBackpackGrantGravity = true; // 默认允许背包提供无重力喵~
+    public static boolean B_CanBackpackGrantGravity = true; // 默认允许背包提供无重力
 
 
     @SubscribeEvent
@@ -20,9 +20,9 @@ public class ModClientEvents {
         event.registerLayerDefinition(BASIC_BACKPACK_Converted.LAYER_LOCATION, BASIC_BACKPACK_Converted::createBodyLayer);
     }
 
-    // --- 🩺 暂时用这个不依赖那个报错类的写法喵！ ---
+    //暂时用这个不依赖那个报错类
     @SubscribeEvent
     public static void onClientSetup(net.neoforged.fml.event.lifecycle.FMLClientSetupEvent event) {
-        // 如果那个 Event 实在导不进去，咱们先保命，直接在这里执行注册喵呜！
+        // 那个Event怎么导不进去哇！导啊！导！
     }
 }

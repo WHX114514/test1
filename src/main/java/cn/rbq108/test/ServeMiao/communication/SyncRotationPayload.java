@@ -8,12 +8,11 @@ import net.minecraft.resources.ResourceLocation;
 import org.joml.Quaternionf;
 import java.util.UUID;
 
-// 🩺 这是一个包含玩家 ID、四元数和失重开关的“数据胶囊”
 public record SyncRotationPayload(UUID playerId, Quaternionf quat, boolean lowGravity) implements CustomPacketPayload {
 
     public static final Type<SyncRotationPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(main.MODID, "rotation_sync"));
 
-    // 🛠️ 序列化与反序列化（把数据拆成 0 和 1）
+    // 序列化与反序列化（人话：解包）
     public static final StreamCodec<FriendlyByteBuf, SyncRotationPayload> STREAM_CODEC = StreamCodec.ofMember(
             SyncRotationPayload::write, SyncRotationPayload::read
     );

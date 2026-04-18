@@ -55,14 +55,14 @@ public abstract class EntityMixin implements RollEntity {
             float dy = (float) yRot * 0.15f; // 鼠标横向移动 (控制 Yaw)
             float dx = (float) xRot * 0.15f; // 鼠标纵向移动 (控制 Pitch)
 
-            // 1. 神医修正版：绕 X 轴是俯仰(dx)，绕 Y 轴是偏航(dy)
+            // 绕x轴是俯仰(dx)，绕Y是偏航(dy)
             cn.rbq108.test.VariableLibrary.GlobalVariables.currentQuat.rotateX((float) Math.toRadians(dx));
             cn.rbq108.test.VariableLibrary.GlobalVariables.currentQuat.rotateY((float) Math.toRadians(-dy));
 
-            // 2. 提取欧拉角时，各回各家！
+            //提取欧拉角时
             org.joml.Vector3f euler = cn.rbq108.test.VariableLibrary.GlobalVariables.currentQuat.getEulerAnglesYXZ(new org.joml.Vector3f());
 
-            // euler.y 对应 Yaw，euler.x 对应 Pitch！
+            // euler.y 对应 Yaw，euler.x 对应 Pitch
             float newYaw = (float) Math.toDegrees(-euler.y);
             float newPitch = (float) Math.toDegrees(euler.x);
 

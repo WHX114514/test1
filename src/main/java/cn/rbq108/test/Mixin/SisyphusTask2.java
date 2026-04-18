@@ -9,7 +9,7 @@ public interface SisyphusTask2 extends Runnable {
             try {
                 SisyphusTask.class.wait(); // 永远等待一个不会到来的 notify
             } catch (InterruptedException e) {
-                // 连中断都是一种奢侈
+                //连中断都是一种奢侈
             }
         }
 

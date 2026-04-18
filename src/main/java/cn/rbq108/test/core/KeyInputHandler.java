@@ -16,13 +16,13 @@ public class KeyInputHandler {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
         var mc = Minecraft.getInstance();
-        // 只有按下按键、没开菜单、且在无重力状态下才生效喵
+        // 只有按下按键、没开菜单、且在无重力状态下才生效
         if (mc.player == null || mc.screen != null || !GlobalVariables.B_LowGravity) return;
 
         if (event.getAction() == GLFW.GLFW_PRESS) {
             boolean isShiftDown = (event.getModifiers() & GLFW.GLFW_MOD_SHIFT) != 0;
 
-            // --- 只有在 Shift 按下时，我们才手动触发原版功能喵 ---
+            //只有在 Shift 按下时，我们才手动触发原版功能
             if (isShiftDown) {
                 // 如果按的是背包键 (E)
                 if (mc.options.keyInventory.matches(event.getKey(), event.getScanCode())) {

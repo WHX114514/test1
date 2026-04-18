@@ -1,3 +1,4 @@
+//这里好多代码和注释都是从桶滚模组搬过来的，我自己不会也不敢改（
 package cn.rbq108.test;
 
 import net.minecraft.core.registries.BuiltInRegistries;

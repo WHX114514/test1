@@ -12,7 +12,7 @@ public class calculate {
         var mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        // --- 🩺 第一步：碰撞同步 ---
+        //碰撞同步
         double ax = mc.player.getX() - mc.player.xo;
         double ay = mc.player.getY() - mc.player.yo;
         double az = mc.player.getZ() - mc.player.zo;
@@ -22,7 +22,7 @@ public class calculate {
         }
         if (mc.player.verticalCollision && Math.abs(ay) < 0.01) GlobalVariables.B_Vy1 = 0;
 
-        // --- 🩺 第二步：Config 变量提取 ---
+        //Config 变量提取
         float cfgVmax = Config.PHYSICS.vMax.get().floatValue();
         float cfgRushXy = Config.PHYSICS.rushXy.get().floatValue();
         float cfgRushZ = Config.PHYSICS.rushZ.get().floatValue();
@@ -30,7 +30,7 @@ public class calculate {
         float cfgAmax = Config.PHYSICS.aMax.get().floatValue();
         float cfgBrake = Config.PHYSICS.brakeRatio.get().floatValue();
 
-        // --- 阶段一：目标推力计算 ---
+        //一：目标推力计算
         int inX = GlobalVariables.B_INx;
         int inY = GlobalVariables.B_INy;
         int inZ = GlobalVariables.B_INz;
@@ -50,7 +50,7 @@ public class calculate {
 
         CoordinateSystemTransformation.transformVelocityToWorld();
 
-        // --- 🩺 阶段三：平滑制动结算 ---
+        // 三：平滑制动（我二呢？）
         boolean hasInput = (inX != 0 || inY != 0 || inZ != 0);
         boolean shouldBrake = cn.rbq108.test.VariableLibrary.debug.DEBUG_B_HOLD ||
                 cn.rbq108.test.core.Keybinds.B_MANUAL_BRAKE.isDown();
@@ -62,12 +62,12 @@ public class calculate {
         }
 
         if (!hasInput && shouldBrake) {
-            // 🧪 神医秘制：指数阻尼平滑制动 (代替死板的减法喵！)
+
             float damping = Math.min(cfgBrake * 0.1f, 0.95f);
             currentVel.lerp(new Vector3f(0, 0, 0), damping);
             if (currentVel.length() < 0.005f) currentVel.set(0, 0, 0);
         } else {
-            // 正常的推力加速
+
             Vector3f targetVel = new Vector3f(GlobalVariables.B_Vx4, GlobalVariables.B_Vy4, GlobalVariables.B_Vz4);
             float maxA = cfgAmax * cfgAfterburner;
             Vector3f accel = new Vector3f();
@@ -82,14 +82,14 @@ public class calculate {
     }
 
     private static void printDebugInfo(String status) {
-        System.out.printf("[神医X光机 - %s] 输入[Z:%d] | 真实惯性[Vx:%.3f, Vy:%.3f, Vz:%.3f]\n",
+        System.out.printf("[这里写啥都没用了，反正idea不显示中文 - %s] 输入[Z:%d] | 真实惯性[Vx:%.3f, Vy:%.3f, Vz:%.3f]\n",
                 status, GlobalVariables.B_INz, GlobalVariables.B_Vx1, GlobalVariables.B_Vy1, GlobalVariables.B_Vz1);
     }
 }
 
 
 
-/// 下面是……我塞的屎！
+// 下面是……我塞的屎！
 /*package cn.rbq108.test.motion;
 
 import cn.rbq108.test.VariableLibrary.GlobalVariables;
@@ -104,9 +104,7 @@ public class calculate {
         var mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        // ==========================================
-        // 神医的终极物理同步传感器：彻底消灭幽灵加速喵！
-        // ==========================================
+
         double actualVx = mc.player.getX() - mc.player.xo;
         double actualVy = mc.player.getY() - mc.player.yo;
         double actualVz = mc.player.getZ() - mc.player.zo;
@@ -120,9 +118,7 @@ public class calculate {
             if (Math.abs(actualVy) < 0.01) GlobalVariables.B_Vy1 = 0.0f;
         }
 
-        // ==========================================
-        // 神医接线：一次性从 Config 提取所有需要的物理参数！
-        // ==========================================
+
         float cfgVmax = Config.PHYSICS.vMax.get().floatValue();
         float cfgRushXy = Config.PHYSICS.rushXy.get().floatValue();
         float cfgRushZ = Config.PHYSICS.rushZ.get().floatValue();
@@ -130,7 +126,7 @@ public class calculate {
         float cfgAmax = Config.PHYSICS.aMax.get().floatValue();
         float cfgBrake = Config.PHYSICS.brakeRatio.get().floatValue();
 
-        // --- 阶段一：获取主观意图，计算玩家系“真”目标速度 ---
+
         int inX = GlobalVariables.B_INx;
         int inY = GlobalVariables.B_INy;
         int inZ = GlobalVariables.B_INz;
@@ -157,7 +153,7 @@ public class calculate {
         float targetVy = localInput.y * cfgVmax;
         float targetVz = localInput.z * cfgVmax;
 
-        // --- 重新调配的冲刺倍率药方 ---
+
         // 使用 Config 里的冲刺倍率
         float currentRushX = GlobalVariables.B_rush ? cfgRushXy : 1.0f;
         float currentRushY = GlobalVariables.B_rush ? cfgRushXy : 1.0f;
@@ -167,22 +163,18 @@ public class calculate {
             currentRushZ = (inZ > 0) ? cfgRushZ : cfgRushXy;
         }
 
-        // 结算所有狂暴倍率，得出【三轴真目标速度】
-        // 使用 Config 里的加力燃烧室倍率
+
         GlobalVariables.B_Vx3_1 = targetVx * currentRushX * cfgAfterburner;
         GlobalVariables.B_Vy3_1 = targetVy * currentRushY * cfgAfterburner;
         GlobalVariables.B_Vz3_1 = targetVz * currentRushZ * cfgAfterburner;
 
-        // --- 阶段二：坐标折跃 (算出世界系目标速度 B_Vx4) ---
+
         CoordinateSystemTransformation.transformVelocityToWorld();
 
-        // --- 阶段三：惯性与制动结算 ---
+
         boolean hasInput = (GlobalVariables.B_INx != 0 || GlobalVariables.B_INy != 0 || GlobalVariables.B_INz != 0);
 
-        // ==========================================
-        // 神医的极简飞线：只需加这一句！
-        // ==========================================
-        // 只要【全局开关开着】或者【玩家捏住了H键】，就判定为“需要刹车”！
+
         boolean shouldBrake = cn.rbq108.test.VariableLibrary.debug.DEBUG_B_HOLD || cn.rbq108.test.core.Keybinds.B_MANUAL_BRAKE.isDown();
 
         if (!hasInput && !shouldBrake) {
@@ -199,18 +191,16 @@ public class calculate {
         // 使用 Config 里的最大加速度
         float currentMaxAccel = cfgAmax * cfgAfterburner;
 /*
-        // 强制注入 Debug 刹车倍率！
+
         if (!hasInput && cn.rbq108.test.VariableLibrary.debug.DEBUG_B_HOLD) {
             currentMaxAccel *= cfgBrake;
         }
 
 
 
-        // ==========================================
-        // 神医怒接断掉的神经：这里必须用 shouldBrake 喵！
-        // ==========================================
+
         if (!hasInput && shouldBrake) {
-            // 这下你按 H 键的时候，才能真正吃到那 0.1 的倍率！
+
             currentMaxAccel *= cfgBrake;
         }
 
@@ -226,15 +216,13 @@ public class calculate {
         GlobalVariables.B_Vy1 = currentWorldVel.y;
         GlobalVariables.B_Vz1 = currentWorldVel.z;
 
-        // 结算完成后，立刻输出最鲜活的物理数据！
+
         printDebugInfo(hasInput ? "引擎狂暴喷射中" : "主动减速制动中");
     }
 
-    // ==========================================
-    // 绒布球的核磁共振仪：数据打印中心！
-    // ==========================================
+
     private static void printDebugInfo(String status) {
-        System.out.printf("[神医X光机 - %s] 输入[Z:%d] | 视角[Pitch:%.1f, Yaw:%.1f] | 真实惯性[Vx:%.3f, Vy:%.3f, Vz:%.3f] | 世界目标[Vx4:%.3f, Vy4:%.3f, Vz4:%.3f]\n",
+        System.out.printf("[148455674564 - %s] 输入[Z:%d] | 视角[Pitch:%.1f, Yaw:%.1f] | 真实惯性[Vx:%.3f, Vy:%.3f, Vz:%.3f] | 世界目标[Vx4:%.3f, Vy4:%.3f, Vz4:%.3f]\n",
                 status,
                 GlobalVariables.B_INz,
                 GlobalVariables.B_Dx, GlobalVariables.B_Dy,
@@ -245,7 +233,8 @@ public class calculate {
 }*/
 
 
-/// 没想到吧屎有两坨！
+// 没想到吧屎有两坨！
+
 /*package cn.rbq108.test.motion;
 
 import cn.rbq108.test.VariableLibrary.GlobalVariables;
@@ -259,29 +248,24 @@ public class calculate {
         var mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        // ==========================================
-        // 神医的终极物理同步传感器：彻底消灭幽灵加速喵！
-        // ==========================================
-        // 偷窥原版引擎，看看上一帧玩家在 3D 空间里实际到底挪动了多少距离
         double actualVx = mc.player.getX() - mc.player.xo;
         double actualVy = mc.player.getY() - mc.player.yo;
         double actualVz = mc.player.getZ() - mc.player.zo;
 
-        // 如果引擎报告发生了水平碰撞（撞墙）
+
         if (mc.player.horizontalCollision) {
-            // 如果 X 轴实际位移趋近于 0，说明 X 轴方向被墙彻底挡死！清空 X 轴惯性！
+            // 如果 X 轴实际位移趋近于 0，说明 X 轴方向被墙彻底挡死，清空 X 轴惯性
             if (Math.abs(actualVx) < 0.01) GlobalVariables.B_Vx1 = 0.0f;
-            // 如果 Z 轴被挡死，清空 Z 轴惯性喵！
+            // 如果 Z 轴被挡死，清空 Z 轴惯性
             if (Math.abs(actualVz) < 0.01) GlobalVariables.B_Vz1 = 0.0f;
         }
 
-        // 如果发生了垂直碰撞（踩地板或撞天花板）
+
         if (mc.player.verticalCollision) {
-            // 垂直方向被挡死，清空 Y 轴惯性，保证着陆后不会在地上蹦迪！
+
             if (Math.abs(actualVy) < 0.01) GlobalVariables.B_Vy1 = 0.0f;
         }
 
-        // --- 阶段一：获取主观意图，计算玩家系“真”目标速度 ---
         int inX = GlobalVariables.B_INx;
         int inY = GlobalVariables.B_INy;
         int inZ = GlobalVariables.B_INz;
@@ -307,7 +291,7 @@ public class calculate {
         float targetVy = localInput.y * GlobalVariables.B_Vmax;
         float targetVz = localInput.z * GlobalVariables.B_Vmax;
 
-        // --- 重新调配的冲刺倍率药方 ---
+
         float currentRushX = GlobalVariables.B_rush ? GlobalVariables.B_rush_xy : 1.0f;
         float currentRushY = GlobalVariables.B_rush ? GlobalVariables.B_rush_xy : 1.0f;
 
@@ -316,18 +300,15 @@ public class calculate {
             currentRushZ = (inZ > 0) ? GlobalVariables.B_rush_z : GlobalVariables.B_rush_xy;
         }
 
-        // 结算所有狂暴倍率，得出【三轴真目标速度】
         GlobalVariables.B_Vx3_1 = targetVx * currentRushX * GlobalVariables.B_AfterburnerRatio;
         GlobalVariables.B_Vy3_1 = targetVy * currentRushY * GlobalVariables.B_AfterburnerRatio;
         GlobalVariables.B_Vz3_1 = targetVz * currentRushZ * GlobalVariables.B_AfterburnerRatio;
 
-        // --- 阶段二：坐标折跃 (算出世界系目标速度 B_Vx4) ---
+
         CoordinateSystemTransformation.transformVelocityToWorld();
 
-        // --- 阶段三：惯性与制动结算 ---
-        boolean hasInput = (GlobalVariables.B_INx != 0 || GlobalVariables.B_INy != 0 || GlobalVariables.B_INz != 0);
 
-        // 现在的代码：听从 Debug 控制台的指令喵！
+
         if (!hasInput && !cn.rbq108.test.VariableLibrary.debug.DEBUG_B_HOLD) {
             printDebugInfo("自由滑行中...");
             return;
@@ -341,7 +322,6 @@ public class calculate {
 
         float currentMaxAccel = GlobalVariables.B_Amax * GlobalVariables.B_AfterburnerRatio;
 
-        //强制注入 Debug 刹车倍率！
         if (!hasInput && cn.rbq108.test.VariableLibrary.debug.DEBUG_B_HOLD) {
             currentMaxAccel *= GlobalVariables.B_BrakeRatio;
         }
@@ -356,15 +336,13 @@ public class calculate {
         GlobalVariables.B_Vy1 = currentWorldVel.y;
         GlobalVariables.B_Vz1 = currentWorldVel.z;
 
-        // 结算完成后，立刻输出最鲜活的物理数据！
-        printDebugInfo(hasInput ? "引擎狂暴喷射中" : "主动减速制动中");
+
+        printDebugInfo(hasInput ? "1" : "2");
     }
 
-    // ==========================================
-    // 绒布球的核磁共振仪：数据打印中心！
-    // ==========================================
+
     private static void printDebugInfo(String status) {
-        System.out.printf("[神医X光机 - %s] 输入[Z:%d] | 视角[Pitch:%.1f, Yaw:%.1f] | 真实惯性[Vx:%.3f, Vy:%.3f, Vz:%.3f] | 世界目标[Vx4:%.3f, Vy4:%.3f, Vz4:%.3f]\n",
+        System.out.printf("[548584 - %s] 输入[Z:%d] | 视角[Pitch:%.1f, Yaw:%.1f] | 真实惯性[Vx:%.3f, Vy:%.3f, Vz:%.3f] | 世界目标[Vx4:%.3f, Vy4:%.3f, Vz4:%.3f]\n",
                 status,
                 GlobalVariables.B_INz,
                 GlobalVariables.B_Dx, GlobalVariables.B_Dy,

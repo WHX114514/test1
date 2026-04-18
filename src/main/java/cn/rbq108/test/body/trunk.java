@@ -22,7 +22,7 @@ public class trunk {
     public static void onClientTick(ClientTickEvent.Post event) {
 
         if (GlobalVariables.B_LowGravity) {
-            // 🩺 初始化视觉坐标：只在开启瞬间执行一次，防止身子闪现
+            // 初始化视觉坐标，只在开启瞬间执行一次，防止身子闪现
             if (!wasLowGravity) {
                 float rx = (float) GlobalVariables.B_Dx;
                 float ry = (float) GlobalVariables.B_Dy;
@@ -34,7 +34,7 @@ public class trunk {
                 wasLowGravity = true;
             }
 
-            // 🩺 纯净的平滑计算，不再有任何碰撞箱干预
+            // 纯净的平滑计算
             float lerpSpeed = 0.3f;
             prevSmoothX = smoothX; prevSmoothY = smoothY; prevSmoothZ = smoothZ;
 

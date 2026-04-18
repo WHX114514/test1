@@ -1,3 +1,8 @@
+//这里几乎全是小宇Lulu写的代码，难得留下规规矩矩的注释（
+//代码后面满屏跟着的"xiaoyululu"+1看着真舒心哇（
+//不用自己写就是好）
+//uid 436365400
+
 package cn.rbq108.test.Mixin;
 
 import com.llamalad7.mixinextras.sugar.Share;
@@ -15,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+
 
 @Mixin(Camera.class)
 public abstract class CameraContral implements RollCamera {

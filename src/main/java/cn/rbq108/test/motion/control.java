@@ -15,7 +15,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 @EventBusSubscriber(modid = main.MODID, value = Dist.CLIENT)
 public class control {
 
-    // Input state variables to be read by the motion calculation system
+
     public static int B_INx = 0;
     public static int B_INy = 0;
     public static int B_INz = 0;

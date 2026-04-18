@@ -1,5 +1,5 @@
 package cn.rbq108.test.camera;
-///这个应该是计算相机角度用的？
+///这个应该是计算相机角度用的？过于简单了点
 public class CameraManager {
     public static float currentPitch;
     public static float prevPitch;

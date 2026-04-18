@@ -17,7 +17,7 @@ public abstract class MixinModelPart {
 
     @Inject(method = "translateAndRotate", at = @At("HEAD"), cancellable = true)
     public void onTranslateAndRotate(PoseStack poseStack, CallbackInfo ci) {
-        // 🩺 只在渲染本地玩家且开启失重时生效
+        // 只在渲染本地玩家且开启失重时生效
         if (GlobalVariables.B_LowGravity && GlobalVariables.isPlayerRendering) {
             if ((Object)this == GlobalVariables.playerHead || (Object)this == GlobalVariables.playerHat) {
                 // 1. 保留脖子支点

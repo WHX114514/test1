@@ -14,29 +14,29 @@ import java.util.WeakHashMap;
 @EventBusSubscriber(modid = main.MODID, value = Dist.CLIENT)
 public class Helmet {
 
-    // 🩺 储物柜：专门用来临时存放被摘下来的头盔（支持多人联机，一人一个格子）
+    // 临时存放被摘下来的头盔（支持多人联机，一人一个格子）
     private static final WeakHashMap<Player, ItemStack> hiddenHelmets = new WeakHashMap<>();
 
-    // 🎨 画画前（Pre）：查水表，没收头盔
+    // 渲染前没收头盔
     @SubscribeEvent
     public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
         Player player = event.getEntity();
 
         if (GlobalVariables.B_LowGravity) {
-            // 🩺 绕过底层限制，直接去玩家的背包内存列表里拿东西！(索引 3 代表头盔栏)
+            //绕过底层限制，直接去玩家的背包内存列表里拿东西(索引3对应头盔栏)
             ItemStack headItem = player.getInventory().armor.get(3);
 
             if (!headItem.isEmpty()) {
                 String itemName = headItem.getItem().toString();
 
-                // 💥 判定 VIP：如果不是咱们的王牌头盔
+                // 判定头盔是否属于模组自己的东西，否则不渲染（毕竟为了适配现在这个头部运动，要专门写对应的旋转）
                 if (!itemName.contains("test:pilot_helmet")) {
 
-                    // 1. 塞进储物柜保管
+                    //找个犄角旮旯塞着
                     hiddenHelmets.put(player, headItem);
 
-                    // 💥 2. 神不知鬼不觉地清空背包里的头盔！
-                    // 绝不使用 setItemSlot！这招完美避开了游戏底层的穿脱音效和护甲重算！
+                    // 清空背包里的头盔
+                    // 绝不能使用setItemSlot（不信的话自己试试），避开了游戏底层的穿脱音效和护甲重算（后注：真的避免了吗）
                     player.getInventory().armor.set(3, ItemStack.EMPTY);
                 }
             }

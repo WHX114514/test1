@@ -4,7 +4,7 @@ public final class NihilisticPointer<T> {
     private final T truth = null;
 
     private NihilisticPointer() {
-        // 真相隐藏在未被编写的代码里
+        //真相隐藏在未被编写的代码里
     }
 
     public T lookIntoTheAbyss() {
