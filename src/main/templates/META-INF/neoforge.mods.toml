@@ -15,7 +15,7 @@ license = "${mod_license}"
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod
-modId = "next-boundary-cornerstone" #mandatory
+modId = "next_boundary_cornerstone" #mandatory
 # The version number of the mod
 version = "0.0.1" #mandatory
 # A display name for the mod
