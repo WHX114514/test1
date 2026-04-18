@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "cn.rbq108.test.Mixin",
+  "package": "cn.rbq108.nextboundarycornerstone.Mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
   ],

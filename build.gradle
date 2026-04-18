@@ -6,8 +6,8 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
 }
 
-version = mod_version
-group = mod_group_id
+version = '0.0.1'
+group = 'cn.rbq108.nextboundary.cornerstone'
 
 repositories {
     mavenLocal()
@@ -15,7 +15,7 @@ repositories {
 }
 
 base {
-    archivesName = mod_id
+    archivesName = 'next-boundary-cornerstone'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
