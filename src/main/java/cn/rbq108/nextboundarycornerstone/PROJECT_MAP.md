@@ -278,3 +278,16 @@ test/
 
 虽然交接文档已经用不上了，但是项目地图估计还能用来写一下模组架构（？）
 但，懒得写（
+
+api文件夹里面是doabarrrool模组自带实现roll视角的代码，全是搬来的
+
+body底下的PlayerRenderEvents.java和EntityEvent.java已经作废了喵，用不着了
+hitbox字面意思负责碰撞箱的，model是控制自己第三人称身体渲染的东西，motion是控制动作的（虽然没啥用），trunk似乎是负责平滑运动的
+
+camera文件夹底下的CameraManager是负责计算相机角度的
+
+client.model底下的BASIC_BACKPACK就是基础背包的建模
+
+core底下的一个.rbq文档是按键定义（自己写模组的时候方便自己看的），剩下三个是和按键输入和注册之类的
+
+剩下的懒得写了
