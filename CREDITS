@@ -1,0 +1,28 @@
+Credits
+
+本项目的部分视角翻滚逻辑参考了 Do A Barrel Roll。
+Part of the perspective rolling logic of this project refers to Do A Barrel Roll.
+
+原作者： enjarai
+Original author:enjarai
+
+项目链接： https://github.com/enjarai/do-a-barrel-roll
+Project link：https://github.com/enjarai/do-a-barrel-roll
+
+原协议： LGPL-3.0
+original agreement： LGPL-3.0
+
+
+
+
+
+关于 LGPL-3.0 的简短说明 (Summary of LGPL-3.0)
+本项目引用了遵循 LGPL-3.0 协议的代码。根据该协议：
+
+本项目允许对引用部分进行修改并重新分发。
+
+本项目的核心逻辑采用了 AGPL-3.0 协议，这与 LGPL-3.0 的分发要求保持兼容。
+
+用户可以在上述项目链接中找到原始代码的副本。
+
+This project incorporates code licensed under the GNU Lesser General Public License v3.0 (LGPL-3.0). You may obtain a copy of the original code and the full license text at the project link provided above.
