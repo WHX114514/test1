@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "test:item/basic_backpack"
+    "layer0": "next_boundary_cornerstone:item/basic_backpack"
   }
 
 }

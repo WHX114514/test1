@@ -80,7 +80,7 @@ public class main
 
     // Creates a creative tab with the id "test:example_tab" for the example item, that is placed after the combat tab
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
-            .title(Component.translatable("itemGroup.test")) // 栏位标题
+            .title(Component.translatable("itemGroup.next_boundary_cornerstone")) // 栏位标题
             .withTabsBefore(CreativeModeTabs.COMBAT)
             //把图标换成你的背包（反正只有这一个东西）
             .icon(() -> BASIC_BACKPACK.get().getDefaultInstance())

@@ -28,7 +28,7 @@ public class BasicBackpack extends ArmorItem {
             SoundEvents.ARMOR_EQUIP_LEATHER, // 穿戴声效
             () -> Ingredient.EMPTY, // 修复材料喵
             // 指定贴图路径，注意全小写喵 它会去找 assets/test/textures/models/armor/basic_backpack_layer_1.png
-            List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("test", "basic_backpack"))),
+            List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("next_boundary_cornerstone", "basic_backpack"))),
             0.0F, // 韧性
             0.0F  // 击退抗性
     ));

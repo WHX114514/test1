@@ -1,6 +1,4 @@
 {
-  "itemGroup.test": "NEXT Boundary:equipment",
-  "block.test.example_block": "Example Block",
-  "item.test.example_item": "Example Item",
-  "item.test.basic_backpack": "basic backpack"
+  "itemGroup.next_boundary_cornerstone": "NEXT Boundary:equipment",
+  "item.next_boundary_cornerstone.basic_backpack": "basic backpack"
 }
