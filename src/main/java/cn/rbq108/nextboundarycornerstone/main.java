@@ -1,3 +1,8 @@
+/*
+ * Portions of this software are derived from work by steen.
+ * Licensed under the MIT License. See the NOTICE file in the project root for full license text.
+ */
+
 package cn.rbq108.nextboundarycornerstone;
 
 import cn.rbq108.nextboundarycornerstone.item.equipment.BasicBackpack;
