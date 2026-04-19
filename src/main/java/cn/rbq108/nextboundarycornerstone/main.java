@@ -1,7 +1,4 @@
-/*
- * Portions of this software are derived from work by steen.
- * Licensed under the MIT License. See the NOTICE file in the project root for full license text.
- */
+// Reference: https://github.com/enjarai/do-a-barrel-roll
 
 package cn.rbq108.nextboundarycornerstone;
 
