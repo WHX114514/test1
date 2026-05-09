@@ -16,7 +16,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 public class AllowFly {
 
     @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent.Post event) { // 🩺 重点在这里！加个 .Post
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
 
         /*不是这个if在这有任何卵用吗？
