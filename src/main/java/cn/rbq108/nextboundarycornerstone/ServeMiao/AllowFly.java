@@ -37,8 +37,47 @@ public class AllowFly {
         */
         //我写的这是啥？
 
-
+        // 默认游戏模式
         GameType gameMode = GameType.SURVIVAL;
+        boolean modDeterminedMayFly;
+
+        if (player.isCreative() || player.isSpectator()) {
+            modDeterminedMayFly = true;
+        } else {
+            modDeterminedMayFly = GlobalVariables.B_LowGravity;
+        }
+        if (player.getAbilities().mayfly != modDeterminedMayFly) {
+            player.getAbilities().mayfly = modDeterminedMayFly;
+
+            if (!modDeterminedMayFly && !player.isCreative() && !player.isSpectator()) {
+                player.getAbilities().flying = false;
+            }
+
+            // 同步给客户端
+            player.onUpdateAbilities();
+        }
+        /*GameType gameMode = GameType.SURVIVAL;
+        // 逻辑：(开启了低重力) 或者 (是创造模式) 或者 (是旁观者模式) → 这三种情况都必须能飞
+        boolean targetMayFly = GlobalVariables.B_LowGravity || player.isCreative() || player.isSpectator();
+
+        if (player.getAbilities().mayfly != targetMayFly) {
+            player.getAbilities().mayfly = targetMayFly;
+            if (!targetMayFly) {
+                player.getAbilities().flying = false;
+            }
+
+            player.onUpdateAbilities();
+        }*/
+        /*
+        boolean canFly = GlobalVariables.B_LowGravity || player.isCreative() || player.isSpectator();
+
+        if (player.getAbilities().mayfly != canFly) {
+            player.getAbilities().mayfly = canFly;
+            // 如果失去了飞行权限，强制停止飞行状态，防止生存模式卡在半空
+            if (!canFly) player.getAbilities().flying = false;
+
+            player.onUpdateAbilities();
+        }/*
         if (player instanceof ServerPlayer serverPlayer) {
             gameMode = serverPlayer.gameMode.getGameModeForPlayer();
         } else if (player.level().isClientSide) {
@@ -50,8 +89,8 @@ public class AllowFly {
 
             player.onUpdateAbilities();
         } else if (GlobalVariables.B_LowGravity == false && (gameMode == GameType.SURVIVAL || gameMode == GameType.ADVENTURE)) {
-            player.getAbilities().flying = false;
-            player.getAbilities().mayfly = false;
+            //player.getAbilities().flying = false;//false;刚注释掉的，我发现这行启用创造就会飞不了
+            player.getAbilities().mayfly = true;//false;
 
             //System.out.println("设置后(调用前)1: " + player.getAbilities().mayfly);
             //可能是时序问题？注释掉这两个println后就没用了，必须加一个sleep才能用，或者重新把这个println弄回来？
@@ -59,7 +98,7 @@ public class AllowFly {
             player.onUpdateAbilities();
             //System.out.println("调用后2: " + player.getAbilities().mayfly);
 
-        }
+        }*/
 
 
         /*

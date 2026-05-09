@@ -236,10 +236,10 @@ public class ClientEvents {
                 gameMode = Minecraft.getInstance().gameMode.getPlayerMode();
             }
             if(gameMode == GameType.SURVIVAL || gameMode == GameType.ADVENTURE){
-                player.getAbilities().flying = false;
-                player.getAbilities().mayfly = false;
+                //player.getAbilities().flying = false;
+                //player.getAbilities().mayfly = false;
 
-                player.onUpdateAbilities();
+                //player.onUpdateAbilities();
 
                 //System.out.println("飞行权限已收回1144556677889911");
 
@@ -253,8 +253,8 @@ public class ClientEvents {
             GlobalVariables.B_Dx = player.getXRot();
             GlobalVariables.B_Dy = player.getYRot();
             if (!player.isCreative()) {
-                player.getAbilities().mayfly = false;
-                player.getAbilities().flying = false;
+                //player.getAbilities().mayfly = false;
+                //player.getAbilities().flying = false;
             }
         }
     }
